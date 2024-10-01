@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\MataKuliahPraktikumController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +15,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+// Route::get('/dashboard', [LandingPageController::class, 'index']);
+
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
+Route::get('/landingpage', function () {
     return view('landingpage');
 });
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
+
+Route::resource('mata_kuliah_praktikum', MataKuliahPraktikumController::class);

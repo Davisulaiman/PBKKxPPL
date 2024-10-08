@@ -15,10 +15,10 @@ class CreateMataKuliahPraktikumTable extends Migration
     {
         Schema::create('mata_kuliah_praktikum', function (Blueprint $table) {
             // Kolom nomor sebagai auto increment ID
-            $table->id('nomor');
+            $table->id();
 
             // Kode Mata Kuliah sebagai primary key
-            $table->string('kode_mata_kuliah')->unique();
+            $table->string('kode_mata_kuliah');
 
             // Kolom lainnya
             $table->string('nama_mata_kuliah');
@@ -37,6 +37,8 @@ class CreateMataKuliahPraktikumTable extends Migration
 
             // Timestamps
             $table->timestamps();
+
+            // $table->unique('kode_mata_kuliah', 'kelas');
         });
     }
 

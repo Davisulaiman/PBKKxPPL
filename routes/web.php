@@ -33,3 +33,11 @@ Route::get('/dashboard', function () {
 });
 
 Route::resource('mata_kuliah_praktikum', MataKuliahPraktikumController::class);
+
+
+// Route::middleware('auth')->group(function () {
+// Auth::routes();
+// });
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+

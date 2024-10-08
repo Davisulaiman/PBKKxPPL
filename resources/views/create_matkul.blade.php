@@ -1,5 +1,5 @@
-<x-layout appname="Laboratorium Sistem Informasi UNIB">
-
+@extends('template.template')
+@section('content')
     <div class="container mt-4">
         <h2>Tambah Mata Kuliah Praktikum</h2>
         <form action="{{ route('mata_kuliah_praktikum.store') }}" method="POST">
@@ -38,4 +38,4 @@
         </form>
     </div>
 
-</x-layout>
+@endsection

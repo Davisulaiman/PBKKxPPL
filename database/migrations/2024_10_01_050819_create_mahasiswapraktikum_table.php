@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMataKuliahPraktikumTable extends Migration
+class CreateMahasiswaPraktikumTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateMataKuliahPraktikumTable extends Migration
      */
     public function up()
     {
-        Schema::create('mata_kuliah_praktikum', function (Blueprint $table) {
+        Schema::create('mahasiswapraktikum', function (Blueprint $table) {
             // Kolom nomor sebagai auto increment ID
-            $table->id('nomor');
+            $table->id();
 
             // Kode Mata Kuliah sebagai primary key
-            $table->string('kode_mata_kuliah')->primary();
+            $table->string('kode_mata_kuliah');
 
             // Kolom lainnya
             $table->string('nama_mata_kuliah');

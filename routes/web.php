@@ -3,7 +3,7 @@
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\MataKuliahPraktikumController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AsistenPraktikumController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,10 +34,14 @@ Route::get('/dashboard', function () {
 
 Route::resource('mata_kuliah_praktikum', MataKuliahPraktikumController::class);
 
+Route::resource('asisten_praktikum', AsistenPraktikumController::class);
+
 
 // Route::middleware('auth')->group(function () {
 // Auth::routes();
 // });
+
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

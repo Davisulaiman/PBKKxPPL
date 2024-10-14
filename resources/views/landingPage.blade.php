@@ -49,7 +49,7 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="{{ url('/dashboard') }}">Get Started</a>
+      <a class="btn-getstarted" href="{{ url('/login') }}">Get Started</a>
 
     </div>
   </header>
@@ -226,11 +226,11 @@
 
     </section><!-- /Why Us Section -->
 
-    
+
 
     </section><!-- /Faq 2 Section -->
 
-   
+
 
   </main>
 
@@ -250,7 +250,7 @@
 
         <!-- Tambahan Contact Kepala Laboran dan Laboran -->
         <div id="contact" class="col-lg-4 col-md-6 footer-contact">
-            
+
             <h4>Contact</h4>
             <p>
               <strong>Kepala Laboran:</strong> Bapak Andang Wijanarko, S.Kom., M.Kom.<br>

@@ -74,17 +74,24 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="{{ url('/mata_kuliah_praktikum') }}">Mata Kuliah Praktikum</a>
-                                <a class="nav-link" href="#">Asisten Praktikum</a>
+                                <a class="nav-link" href="{{ url('/asisten_praktikum') }}">Asisten Praktikum</a>
                                 <a class="nav-link" href="#">Mahasiswa Praktikum</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="#">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLaporan" aria-expanded="false" aria-controls="collapseLaporan">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts
+                            Laporan
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
+                        <div class="collapse" id="collapseLaporan" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="{{ url('/laporan-presensi') }}">Laporan Presensi</a>
+                                <a class="nav-link" href="{{ url('/laporan-praktikum') }}">Laporan Praktikum</a>
+                            </nav>
+                        </div>
                         <a class="nav-link" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Tables
+                            Penilaian Praktikum
                         </a>
                     </div>
                 </div>

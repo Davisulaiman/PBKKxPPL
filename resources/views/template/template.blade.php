@@ -42,12 +42,15 @@
                     <i class="fas fa-user fa-fw"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Settings</a></li>
-                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                    <!-- Log Out -->
                     <li>
-                        <hr class="dropdown-divider" />
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                {{ __('Log Out') }}
+                            </button>
+                        </form>
                     </li>
-                    <li><a class="dropdown-item" href="{{ url('/landingpage') }}">Logout</a></li>
                 </ul>
             </li>
         </ul>

@@ -10,12 +10,11 @@ class MataKuliahPraktikum extends Model
     use HasFactory;
 
     protected $table = 'mata_kuliah_praktikum';
-    protected $fillable = [
-        'kode_mata_kuliah',
-        'nama_mata_kuliah',
-        'kelas',
-        'sks',
-        'tanggal_praktikum',
-        'status_aktif',
-    ];
+
+    protected $fillable = ['kode_mata_kuliah', 'nama_mata_kuliah', 'kelas', 'sks', 'tanggal_praktikum', 'status_aktif'];
+
+    public function asistenPraktikum()
+    {
+        return $this->belongsToMany(AsistenPraktikum::class, 'asisten_praktikum_mata_kuliah_praktikum');
+    }
 }

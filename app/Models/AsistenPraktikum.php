@@ -1,19 +1,27 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class AsistenPraktikum extends Authenticatable
+class AsistenPraktikum extends Model
 {
     use HasFactory;
 
-    protected $table = 'asisten_praktikum';
-    protected $fillable = ['id', 'NPM','nama_praktikan', 'username', 'password', 'mata_kuliah_id'];
+    protected $table = 'asisten_praktikums';
 
-    // Relasi ke tabel MataKuliahPraktikum
+    protected $fillable = ['npm', 'username', 'user_id'];
+
+    // Definisikan relasi many-to-many ke MataKuliahPraktikum
     public function mataKuliahPraktikum()
     {
-        return $this->belongsTo(MataKuliahPraktikum::class, 'mata_kuliah_id');
+        return $this->belongsToMany(MataKuliahPraktikum::class, 'asisten_praktikum_mata_kuliah_praktikum');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

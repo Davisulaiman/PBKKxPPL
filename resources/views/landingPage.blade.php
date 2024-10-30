@@ -29,30 +29,59 @@
 
 </head>
 
-<body class="index-page">
-
-  <header id="header" class="header d-flex align-items-center fixed-top">
+<header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
+        <a href="index.html" class="logo d-flex align-items-center me-auto">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+            <!-- <img src="assets/img/logo.png" alt=""> -->
+            <h1 class="sitename">Laboratorium Sistem Informasi UNIB</h1>
+        </a>
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.png" alt=""> -->
-        <h1 class="sitename">Laboratorium SIstem Informasi UNIB</h1>
-      </a>
+        <nav id="navmenu" class="navmenu">
+            <ul>
+                <li><a href="#hero" class="active">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="#hero" class="active">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-
-      <a class="btn-getstarted" href="{{ url('/login') }}">Get Started</a>
-
+        @if (Route::has('login'))
+            <div class="d-flex align-items-center gap-3">
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="btn-getstarted">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn-getstarted">Log in</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn-getstarted">Register</a>
+                    @endif
+                @endauth
+            </div>
+        @endif
     </div>
-  </header>
+</header>
+
+<style>
+    /* Tambahan style untuk tombol login/register */
+    .btn-getstarted {
+        background: #4f46e5;
+        padding: 8px 20px;
+        margin-left: 10px;
+        border-radius: 4px;
+        color: #fff;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .btn-getstarted:hover {
+        background: #4338ca;
+        color: #fff;
+    }
+
+    .gap-3 {
+        gap: 1rem;
+    }
+</style>
 
   <main class="main">
 
@@ -65,7 +94,7 @@
             <h1>Sistem Informasi Manajemen Praktikum Laboratorium Prodi Sistem Informasi UNIB</h1>
             <p>Selamat Datang di Sistem Informasi Manajemen Praktikum Laboratorium Prodi Sistem Informasi UNIB</p>
             <div class="d-flex">
-              <a href="{{ url('/dashboard') }}" class="btn-get-started">Get Started</a>
+              <a href="{{ url('/login') }}" class="btn-get-started">Get Started</a>
             </div>
           </div>
           <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="200">

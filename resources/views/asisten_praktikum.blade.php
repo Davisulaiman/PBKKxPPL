@@ -3,12 +3,13 @@
 <div class="container mt-4">
     <h2>Daftar Asisten Praktikum</h2>
     <a href="{{ route('asisten_praktikum.create') }}" class="btn btn-primary mb-3">Tambah Asisten Praktikum</a>
+
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>No</th>
-                <th>NPM</th>
                 <th>ID</th>
+                <th>NPM</th>
                 <th>Nama Praktikan</th>
                 <th>Username</th>
                 <th>Mata Kuliah</th>
@@ -16,28 +17,49 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($asistenPraktikum as $index => $asisten)
+            @forelse ($asistenPraktikum as $index => $asisten)
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $asisten->id }}</td>
                 <td>{{ $asisten->npm }}</td>
                 <td>{{ $asisten->nama_praktikan }}</td>
                 <td>{{ $asisten->username }}</td>
-                <td>{{ $asisten->mataKuliahPraktikum->nama_mata_kuliah ?? '-' }}</td>
+                <td>
+                    @if($asisten->mataKuliahPraktikum->isNotEmpty())
+                        @foreach($asisten->mataKuliahPraktikum as $mataKuliah)
+                            {{ $mataKuliah->nama_mata_kuliah }} <br>
+                        @endforeach
+                    @else
+                        -
+                    @endif
+                </td>
                 <td>
                     <a href="{{ route('asisten_praktikum.edit', $asisten->id) }}" class="btn btn-warning">Edit</a>
                     <form action="{{ route('asisten_praktikum.destroy', $asisten->id) }}" method="POST" style="display:inline-block;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Hapus</button>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus asisten praktikum ini?')">Hapus</button>
                     </form>
                 </td>
             </tr>
-            @endforeach
+            @empty
             <tr>
-                <td colspan="8" class="text-center">Tidak ada data asisten praktikum.</td>
+                <td colspan="7" class="text-center">Tidak ada data asisten praktikum.</td>
             </tr>
+            @endforelse
         </tbody>
     </table>
+</div>
+
+{{-- Form untuk memilih Mata Kuliah Praktikum --}}
+<div class="form-group mt-4">
+    <label for="mata_kuliah_praktikum_id">Mata Kuliah Praktikum:</label>
+    <select name="mata_kuliah_praktikum_id[]" class="form-control" multiple>
+        @foreach ($asistenPraktikum as $asisten)
+            @foreach($asisten->mataKuliahPraktikum as $mataKuliah)
+                <option value="{{ $mataKuliah->id }}">{{ $mataKuliah->nama_mata_kuliah }} ({{ $mataKuliah->kode_mata_kuliah }})</option>
+            @endforeach
+        @endforeach
+    </select>
 </div>
 @endsection

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             /* The code below is a modification to add a role field */
-            $table->enum('role', ['kepala lab', 'laboran', 'user'])->default('user');
+            $table->enum('role', ['kepala_lab', 'laboran', 'asisten_dosen'])->default('asisten_dosen');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -18,7 +18,7 @@
         </div>
         <div class="form-group">
             <label>Mata Kuliah Praktikum:</label>
-            <select name="mata_kuliah_praktikum_id" class="form-control">
+            <select name="mata_kuliah_praktikum_id[]" class="form-control" multiple>
                 @foreach($mataKuliahPraktikum as $mataKuliah)
                     <option value="{{ $mataKuliah->id }}">{{ $mataKuliah->nama_mata_kuliah }} ({{ $mataKuliah->kode_mata_kuliah }})</option>
                 @endforeach

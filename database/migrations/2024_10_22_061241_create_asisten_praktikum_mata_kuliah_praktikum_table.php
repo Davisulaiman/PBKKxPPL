@@ -20,7 +20,7 @@ return new class extends Migration
 
                 // Define foreign key with singular name
                 $table->foreignId('mata_kuliah_praktikum_id')
-                    ->constrained('mata_kuliah_praktikum')
+                    ->constrained('mata_kuliah_praktikums')
                     ->onDelete('cascade')
                     ->name('fk_mata_kuliah_praktikum');
 

@@ -15,14 +15,14 @@ class MataKuliahPraktikumController extends Controller
                                                     ->orderBy('kelas', 'asc')
                                                     ->get();
 
-        return view('mata_kuliah_praktikum', compact('mataKuliahPraktikum'));
+        return view('mata_kuliah_praktikum.index', compact('mataKuliahPraktikum'));
     }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('create_matkul');
+        return view('mata_kuliah_praktikum.create');
     }
 
     /**
@@ -34,7 +34,7 @@ class MataKuliahPraktikumController extends Controller
             'kode_mata_kuliah' => 'required',
             'nama_mata_kuliah' => 'required',
             'kelas' => 'required',
-            'sks' => 'required|integer',
+            'sks' => 'required|integer|max:3',
             'tanggal_praktikum' => 'required|date',
             'status_aktif' => 'required|boolean',
         ]);
@@ -61,7 +61,7 @@ class MataKuliahPraktikumController extends Controller
     {
 
         $mata_kuliah_praktikum = MataKuliahPraktikum::where('kode_mata_kuliah', $id)->first()->getAttributes();
-        return view('edit_matkul', ['id' => $id, 'mata_kuliah_praktikum' => compact('mata_kuliah_praktikum')['mata_kuliah_praktikum']]);
+        return view('mata_kuliah_praktikum.edit', ['id' => $id, 'mata_kuliah_praktikum' => compact('mata_kuliah_praktikum')['mata_kuliah_praktikum']]);
     }
 
     /**
@@ -73,7 +73,7 @@ class MataKuliahPraktikumController extends Controller
             'kode_mata_kuliah' => 'required',
             'nama_mata_kuliah' => 'required',
             'kelas' => 'required',
-            'sks' => 'required|integer',
+            'sks' => 'required|integer|max:3',
             'tanggal_praktikum' => 'required|date',
             'status_aktif' => 'required|boolean',
         ]);

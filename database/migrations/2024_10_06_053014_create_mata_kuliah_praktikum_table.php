@@ -13,7 +13,7 @@ class CreateMataKuliahPraktikumTable extends Migration
      */
     public function up()
     {
-        Schema::create('mata_kuliah_praktikum', function (Blueprint $table) {
+        Schema::create('mata_kuliah_praktikums', function (Blueprint $table) {
             // Kolom nomor sebagai auto increment ID
             $table->id();
 

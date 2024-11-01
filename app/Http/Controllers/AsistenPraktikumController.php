@@ -4,101 +4,111 @@ namespace App\Http\Controllers;
 
 use App\Models\AsistenPraktikum;
 use App\Models\MataKuliahPraktikum;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AsistenPraktikumController extends Controller
 {
     public function index()
     {
-        // Mengambil semua data Asisten Praktikum beserta Mata Kuliah Praktikum yang terhubung
-        $asistenPraktikum = AsistenPraktikum::with('MataKuliahPraktikum')->get();
-        return view('asisten_praktikum', compact('asistenPraktikum'));
+        // Retrieve all Asisten Praktikum data with Mata Kuliah Praktikum relationships
+        $asistenPraktikum = AsistenPraktikum::with('mataKuliahPraktikum')->get();
+        return view('asisten_praktikum.index', compact('asistenPraktikum'));
     }
 
     public function create()
     {
-        // Mengambil data Mata Kuliah Praktikum yang aktif
+        // Retrieve active Mata Kuliah Praktikum data
         $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)->get();
-        return view('create_asisten_praktikum', compact('mataKuliahPraktikum'));
+        return view('asisten_praktikum.create', compact('mataKuliahPraktikum'));
     }
 
     public function store(Request $request)
     {
-        // Validasi input
+        // Validate input
         $request->validate([
-            'npm' => 'required|unique:asisten_praktikum',
+            'npm' => 'required|unique:asisten_praktikums,npm',
             'nama_praktikan' => 'required',
-            'username' => 'required|unique:asisten_praktikum',
+            'username' => 'required|unique:asisten_praktikums,username',
             'mata_kuliah_praktikum_id' => 'required|array',
+            'mata_kuliah_praktikum_id.*' => 'exists:mata_kuliah_praktikums,id', // Ensure valid mata kuliah IDs
         ]);
 
-        // Membuat Asisten Praktikum baru
-        $asistenPraktikum = AsistenPraktikum::create($request->only(['npm', 'nama_praktikan', 'username']));
+        // Create a new User with the role of 'asisten_dosen'
+        $user = User::create([
+            'name' => $request->nama_praktikan,
+            'email' => "{$request->username}@gmail.com",
+            'password' => Hash::make($request->username),
+            'role' => 'asisten_dosen',  // Assign role
+        ]);
 
-        // Menghubungkan Asisten Praktikum dengan Mata Kuliah Praktikum yang dipilih
+        // Create the Asisten Praktikum and associate it with the created User
+        $asistenPraktikum = AsistenPraktikum::create([
+            'npm' => $request->npm,
+            'nama_praktikan' => $request->nama_praktikan,
+            'username' => $request->username,
+            'user_id' => $user->id, // Link to the newly created user
+        ]);
+
+        // Associate Asisten Praktikum with selected Mata Kuliah Praktikum
         $asistenPraktikum->mataKuliahPraktikum()->attach($request->mata_kuliah_praktikum_id);
 
-        // Redirect kembali ke halaman index dengan pesan sukses
-        return redirect()->route('asisten_praktikum')->with('success', 'Asisten Praktikum berhasil ditambahkan.');
+        return redirect()->route('asisten_praktikum.index')->with('success', 'Asisten Praktikum berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
-        // Mengambil data Asisten Praktikum berdasarkan ID
         $asisten = AsistenPraktikum::findOrFail($id);
-
-        // Mengambil data Mata Kuliah Praktikum yang aktif
-        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)->get();
-
-        // Mengambil Mata Kuliah Praktikum yang sudah dipilih sebelumnya
+        $mataKuliahPraktikum = MataKuliahPraktikum::all();
         $selectedMataKuliah = $asisten->mataKuliahPraktikum->pluck('id')->toArray();
 
-        // Mengirim data ke view edit
         return view('asisten_praktikum.edit', compact('asisten', 'mataKuliahPraktikum', 'selectedMataKuliah'));
     }
 
     public function update(Request $request, $id)
     {
-        // Validasi input
+        // Validate input
         $request->validate([
-            'npm' => 'required|unique:asisten_praktikum,npm,'.$id,
+            'npm' => 'required|unique:asisten_praktikums,npm,' . $id,
             'nama_praktikan' => 'required',
-            'username' => 'required|unique:asisten_praktikum,username,'.$id,
-            'mata_kuliah' => 'required|array',
-            'mata_kuliah.*' => 'exists:mata_kuliah_praktikum,id'
+            'username' => 'required|unique:asisten_praktikums,username,' . $id,
+            'mata_kuliah_praktikum_id' => 'required|array',
+            'mata_kuliah_praktikum_id.*' => 'exists:mata_kuliah_praktikums,id', // Ensure valid mata kuliah IDs
         ]);
 
-        // Mengambil data Asisten Praktikum berdasarkan ID
+        // Retrieve Asisten Praktikum by ID
         $asisten = AsistenPraktikum::findOrFail($id);
 
-        // Memperbarui data Asisten Praktikum
+        // Update Asisten Praktikum data
         $asisten->update([
             'npm' => $request->npm,
             'nama_praktikan' => $request->nama_praktikan,
-            'username' => $request->username
+            'username' => $request->username,
         ]);
 
-        // Sinkronisasi Mata Kuliah Praktikum yang dipilih
-        $asisten->MataKuliahPraktikum()->sync($request->mata_kuliah);
+        // Sync selected Mata Kuliah Praktikum
+        $asisten->mataKuliahPraktikum()->sync($request->mata_kuliah_praktikum_id);
 
-        // Redirect kembali ke halaman index dengan pesan sukses
-        return redirect()->route('asisten_praktikum')
-            ->with('success', 'Asisten Praktikum berhasil diperbarui.');
+        return redirect()->route('asisten_praktikum.index')->with('success', 'Asisten Praktikum berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        // Mengambil data Asisten Praktikum berdasarkan ID
+        // Retrieve Asisten Praktikum by ID
         $asisten = AsistenPraktikum::findOrFail($id);
 
-        // Menghapus semua relasi dengan Mata Kuliah Praktikum
-        $asisten->MataKuliahPraktikum()->detach();
+        // Detach all Mata Kuliah Praktikum relations
+        $asisten->mataKuliahPraktikum()->detach();
 
-        // Menghapus Asisten Praktikum
+        // Delete associated User if exists
+        if ($asisten->user) {
+            $asisten->user->delete();
+        }
+
+        // Delete Asisten Praktikum
         $asisten->delete();
 
-        // Redirect kembali ke halaman index dengan pesan sukses
-        return redirect()->route('asisten_praktikum')
-            ->with('success', 'Asisten Praktikum berhasil dihapus.');
+        return redirect()->route('asisten_praktikum.index')->with('success', 'Asisten Praktikum berhasil dihapus.');
     }
 }

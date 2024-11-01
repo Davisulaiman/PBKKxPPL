@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
                 'name' =>  'kepala lab',
                 'email' => 'kepalalab@gmail.com',
                 'password' => Hash::make('password'),
-                'role' => 'kepala lab',
+                'role' => 'kepala_lab',
             ],
 
             //agent
@@ -35,7 +35,7 @@ class UsersTableSeeder extends Seeder
                 'name' =>  'user',
                 'email' => 'user@gmail.com',
                 'password' => Hash::make('password'),
-                'role' => 'user',
+                'role' => 'asisten_dosen',
             ]
         ]);
     }

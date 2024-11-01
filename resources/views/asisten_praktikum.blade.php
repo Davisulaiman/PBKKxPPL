@@ -22,7 +22,7 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $asisten->id }}</td>
                 <td>{{ $asisten->npm }}</td>
-                <td>{{ $asisten->nama_praktikan }}</td>
+                <td>{{ $asisten->user->name }}</td>
                 <td>{{ $asisten->username }}</td>
                 <td>
                     @if($asisten->mataKuliahPraktikum->isNotEmpty())
@@ -49,17 +49,5 @@
             @endforelse
         </tbody>
     </table>
-</div>
-
-{{-- Form untuk memilih Mata Kuliah Praktikum --}}
-<div class="form-group mt-4">
-    <label for="mata_kuliah_praktikum_id">Mata Kuliah Praktikum:</label>
-    <select name="mata_kuliah_praktikum_id[]" class="form-control" multiple>
-        @foreach ($asistenPraktikum as $asisten)
-            @foreach($asisten->mataKuliahPraktikum as $mataKuliah)
-                <option value="{{ $mataKuliah->id }}">{{ $mataKuliah->nama_mata_kuliah }} ({{ $mataKuliah->kode_mata_kuliah }})</option>
-            @endforeach
-        @endforeach
-    </select>
 </div>
 @endsection

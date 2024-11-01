@@ -67,35 +67,38 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Praktikum
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ url('/mata_kuliah_praktikum') }}">Mata Kuliah Praktikum</a>
-                                <a class="nav-link" href="{{ url('/asisten_praktikum') }}">Asisten Praktikum</a>
-                                <a class="nav-link" href="#">Mahasiswa Praktikum</a>
-                            </nav>
-                        </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLaporan" aria-expanded="false" aria-controls="collapseLaporan">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Laporan
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLaporan" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ url('/laporan-presensi') }}">Laporan Presensi</a>
-                                <a class="nav-link" href="{{ url('/laporan-praktikum') }}">Laporan Praktikum</a>
-                            </nav>
-                        </div>
-                        <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Penilaian Praktikum
-                        </a>
+
+                        @if (Auth::user()->role == 'laboran' || Auth::user()->role == 'kepala_lab') <!-- Ganti is_admin sesuai dengan logika autentikasi Anda -->
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                                data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Praktikum
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{{ url('/mata_kuliah_praktikum') }}">Mata Kuliah Praktikum</a>
+                                    <a class="nav-link" href="{{ url('/asisten_praktikum') }}">Asisten Praktikum</a>
+                                    <a class="nav-link" href="{{ url('/mahasiswa_praktikum') }}">Mahasiswa Praktikum</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLaporan" aria-expanded="false" aria-controls="collapseLaporan">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Laporan
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLaporan" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{{ url('/laporan-presensi') }}">Laporan Presensi</a>
+                                    <a class="nav-link" href="{{ url('/laporan-praktikum') }}">Laporan Praktikum</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Penilaian Praktikum
+                            </a>
+                        @endif
                     </div>
                 </div>
             </nav>

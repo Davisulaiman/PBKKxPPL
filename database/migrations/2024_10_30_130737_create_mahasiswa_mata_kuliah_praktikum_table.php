@@ -12,6 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('mahasiswa_mata_kuliah_praktikum', function (Blueprint $table) {
+            $table->id();
             // Foreign key for MahasiswaPraktikum
             $table->unsignedBigInteger('mahasiswa_praktikum_id');
             $table->foreign('mahasiswa_praktikum_id')->references('id')->on('mahasiswa_praktikums')->onDelete('cascade');
@@ -24,7 +25,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Composite primary key
-            $table->primary(['mahasiswa_praktikum_id', 'mata_kuliah_praktikum_id']);
+            // $table->primary(['mahasiswa_praktikum_id', 'mata_kuliah_praktikum_id']);
         });
     }
 

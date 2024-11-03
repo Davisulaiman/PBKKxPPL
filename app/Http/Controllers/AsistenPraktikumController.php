@@ -87,6 +87,14 @@ class AsistenPraktikumController extends Controller
             'username' => $request->username,
         ]);
 
+        // Update the associated User data
+        $user = $asisten->user;
+        $user->email = $request->email;
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password); // Update password only if provided
+        }
+        $user->save(); // Save the User model
+
         // Sync selected Mata Kuliah Praktikum
         $asisten->mataKuliahPraktikum()->sync($request->mata_kuliah_praktikum_id);
 

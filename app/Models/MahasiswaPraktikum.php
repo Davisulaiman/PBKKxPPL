@@ -11,11 +11,20 @@ class MahasiswaPraktikum extends Model
 
     protected $fillable = ['nama', 'npm'];
 
-    // Specify any relationships, accessors, or mutators if needed
-    // Example: Relationship with MataKuliah model, if needed
+    /**
+     * Define the relationship with MataKuliahPraktikum.
+     */
     public function mataKuliahPraktikum()
     {
-        return $this->belongsToMany(MataKuliahPraktikum::class, 'mahasiswa_mata_kuliah_praktikum');
+        return $this->belongsToMany(MataKuliahPraktikum::class, 'mahasiswa_mata_kuliah_praktikum')
+                    ->withPivot('id'); // Include pivot fields if needed
     }
 
+    /**
+     * Define the relationship with AbsensiMahasiswaMataKuliahPraktikum.
+     */
+    public function absensi()
+    {
+        return $this->hasMany(AbsensiMahasiswaMataKuliahPraktikum::class, 'mahasiswa_mata_kuliah_praktikum_id');
+    }
 }

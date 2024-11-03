@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\MahasiswaPraktikumImport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\MahasiswaPraktikum;
 use App\Models\MataKuliahPraktikum;
 
@@ -24,7 +26,7 @@ class MahasiswaPraktikumController extends Controller
      */
     public function create()
     {
-        //
+        return view('mahasiswa_praktikum.create');
     }
 
     /**
@@ -32,7 +34,16 @@ class MahasiswaPraktikumController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the input data
+        $request->validate([
+            'npm' => 'required|unique:mahasiswa_praktikums,npm',
+            'nama' => 'required|string|max:255'
+        ]);
+
+        // Create a new Mahasiswa record
+        MahasiswaPraktikum::create($request->only('npm', 'nama'));
+
+        return redirect()->back()->with('success', 'Mahasiswa berhasil ditambahkan');
     }
 
     /**
@@ -53,24 +64,68 @@ class MahasiswaPraktikumController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $mahasiswa = MahasiswaPraktikum::findOrFail($id);
+        return view('mahasiswa_praktikum.edit', compact('mahasiswa'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $mahasiswa = MahasiswaPraktikum::findOrFail($id);
+
+        // Validate the input data
+        $request->validate([
+            'npm' => 'required|unique:mahasiswa_praktikums,npm,' . $mahasiswa->id,
+            'nama' => 'required|string|max:255'
+        ]);
+
+        // Update Mahasiswa data
+        $mahasiswa->update($request->only('npm', 'nama'));
+
+        return redirect()->back()->with('success', 'Mahasiswa berhasil diperbarui');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $mahasiswa = MahasiswaPraktikum::findOrFail($id);
+        $mahasiswa->delete();
+
+        return redirect()->back()->with('success', 'Mahasiswa berhasil dihapus');
+    }
+    public function import(Request $request, $mataKuliahId)
+    {
+        // Validate the file input
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv'
+        ]);
+
+        // Import the Excel file with Mahasiswa data and Mata Kuliah ID
+        Excel::import(new MahasiswaPraktikumImport($mataKuliahId), $request->file('file'));
+
+        return redirect()->back()->with('success', 'Mahasiswa Praktikum data has been imported successfully.');
+    }
+
+    public function deleteAll($mataKuliahId)
+    {
+        $mataKuliah = MataKuliahPraktikum::findOrFail($mataKuliahId);
+
+        // Find all related MahasiswaPraktikum and delete them
+        $mahasiswas = $mataKuliah->mahasiswaPraktikum;
+        foreach ($mahasiswas as $mahasiswa) {
+            $mahasiswa->delete(); // Delete each mahasiswa
+        }
+
+        // Optionally, detach all just to ensure the pivot table is cleaned up
+        $mataKuliah->mahasiswaPraktikum()->detach();
+
+        return redirect()->back()->with('success', 'Semua data mahasiswa telah dihapus.');
     }
 }

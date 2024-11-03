@@ -23,6 +23,7 @@
                 <th>NPM</th>
                 <th>Nama Praktikan</th>
                 <th>Username</th>
+                <th>Email</th>
                 <th>Mata Kuliah</th>
                 <th>Aksi</th>
             </tr>
@@ -34,6 +35,7 @@
                 <td>{{ $asisten->npm }}</td>
                 <td>{{ $asisten->user->name }}</td>
                 <td>{{ $asisten->username }}</td>
+                <td>{{ $asisten->user->email }}</td>
                 <td>
                     @if($asisten->mataKuliahPraktikum->isNotEmpty())
                         @foreach($asisten->mataKuliahPraktikum as $mataKuliah)

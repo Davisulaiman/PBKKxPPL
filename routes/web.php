@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsensiMahasiswaMataKuliahPraktikumController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
@@ -29,7 +30,17 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
         Route::resource('mata_kuliah_praktikum', MataKuliahPraktikumController::class);
         Route::resource('asisten_praktikum', AsistenPraktikumController::class);
         Route::resource('mahasiswa_praktikum', MahasiswaPraktikumController::class);
+
+        Route::post('/import-mahasiswa/{mataKuliahPraktikumId}', [MahasiswaPraktikumController::class, 'import'])->name('import.mahasiswa');
+
+        Route::delete('/mahasiswa_praktikum/delete_all/{mataKuliah}', [MahasiswaPraktikumController::class, 'deleteAll'])->name('mahasiswa_praktikum.deleteAll');
+
+        // Route to display attendance form
+        Route::get('/attendance/{mahasiswaMataKuliahId}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'index'])->name('attendance.index');
+
+        // Route to update attendance
+        Route::post('/attendance/{mahasiswaMataKuliahId}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'update'])->name('attendance.update');
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

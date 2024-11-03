@@ -40,6 +40,20 @@
             @enderror
         </div>
         <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" class="form-control" value="{{ old('email', $asisten->user->email) }}" required>
+            @error('email')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label>Password (biarkan kosong jika tidak ingin mengubah):</label>
+            <input type="password" name="password" class="form-control">
+            @error('password')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        <div class="form-group">
             <label>Mata Kuliah Praktikum:</label>
             <div class="checkbox-list">
                 @foreach($mataKuliahPraktikum as $mataKuliah)

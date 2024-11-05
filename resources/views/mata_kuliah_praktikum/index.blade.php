@@ -6,8 +6,10 @@
             <div class="col-12">
                 <h2 class="mb-4">Mata Kuliah Praktikum</h2>
 
-                <!-- Tombol Tambah Mata Kuliah -->
-                <a href="{{ route('mata_kuliah_praktikum.create') }}" class="btn btn-primary mb-3">Tambah Mata Kuliah</a>
+                <!-- Tombol Tambah Mata Kuliah dengan Icon dan Warna Hijau -->
+                <a href="{{ route('mata_kuliah_praktikum.create') }}" class="btn btn-success mb-3">
+                    <i class="fas fa-plus"></i> Tambah Mata Kuliah <!-- Icon for adding mata kuliah -->
+                </a>
 
                 <!-- Notifikasi Pesan Sukses -->
                 @if (session('success'))
@@ -47,13 +49,13 @@
                                         <a class="btn btn-warning"
                                             href="{{ route('mata_kuliah_praktikum.edit', $mk->kode_mata_kuliah) }}"
                                             title="Edit">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-edit"></i> Edit
                                         </a>
 
                                         <!-- Tombol Hapus dengan Icon: Memicu Modal -->
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                             data-bs-target="#deleteModal{{ $mk->id }}" title="Hapus">
-                                            <i class="fas fa-trash"></i>
+                                            <i class="fas fa-trash"></i> Hapus
                                         </button>
 
                                         <!-- Modal Konfirmasi Hapus -->

@@ -271,7 +271,7 @@
           <div class="footer-contact pt-3">
             <p>Jalan WR. Supratman Kandang Limun</p>
             <p>Bengkulu, 38371</p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+            <p><strong>Email:</strong> <span>siunib@unib.ac.id</span></p>
           </div>
         </div>
 

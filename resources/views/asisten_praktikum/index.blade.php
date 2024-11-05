@@ -3,7 +3,11 @@
 @section('content')
 <div class="container mt-4">
     <h2>Daftar Asisten Praktikum</h2>
-    <a href="{{ route('asisten_praktikum.create') }}" class="btn btn-primary mb-3">Tambah Asisten Praktikum</a>
+
+    <!-- Tombol Tambah Asisten Praktikum -->
+    <a href="{{ route('asisten_praktikum.create') }}" class="btn btn-success mb-3">
+        <i class="fas fa-plus"></i> Tambah Asisten Praktikum <!-- Icon for adding mata kuliah -->
+    </a>
 
     <!-- Notifikasi Pesan Error -->
     @if ($errors->any())
@@ -16,6 +20,7 @@
         </div>
     @endif
 
+    <!-- Tabel Data Asisten Praktikum -->
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -46,13 +51,14 @@
                     @endif
                 </td>
                 <td>
+                    <!-- Tombol Edit dengan Icon dan Teks -->
                     <a href="{{ route('asisten_praktikum.edit', $asisten->id) }}" class="btn btn-warning" title="Edit">
-                        <i class="fas fa-edit"></i> <!-- Using Font Awesome edit icon -->
+                        <i class="fas fa-edit"></i> Edit <!-- Icon and text for edit -->
                     </a>
 
-                    <!-- Tombol Hapus dengan Icon: Memicu Modal -->
+                    <!-- Tombol Hapus dengan Icon dan Teks: Memicu Modal -->
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $asisten->id }}" title="Hapus">
-                        <i class="fas fa-trash"></i> <!-- Using Font Awesome trash icon -->
+                        <i class="fas fa-trash"></i> Hapus <!-- Icon and text for delete -->
                     </button>
 
                     <!-- Modal Konfirmasi Hapus -->
@@ -82,7 +88,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="6" class="text-center">Tidak ada data asisten praktikum.</td> <!-- Adjusted colspan -->
+                <td colspan="7" class="text-center">Tidak ada data asisten praktikum.</td> <!-- Adjusted colspan -->
             </tr>
             @endforelse
         </tbody>

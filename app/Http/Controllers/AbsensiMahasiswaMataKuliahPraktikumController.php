@@ -11,14 +11,57 @@ use Illuminate\Support\Facades\Log;
 
 class AbsensiMahasiswaMataKuliahPraktikumController extends Controller
 {
-    /**
-     * Display a list of students with attendance information for the practicum assistant.
-     */
-    public function index()
-    {
-        $mataKuliahPraktikum = MataKuliahPraktikum::all();
 
-        return view('kehadiran.index', compact('mataKuliahPraktikum'));
+    public function indexMahasiswa($mahasiswaMataKuliahId)
+    {
+        // Fetch attendance record or create a new one if it doesn't exist
+        $attendance = AbsensiMahasiswaMataKuliahPraktikum::firstOrNew(['mahasiswa_mata_kuliah_praktikum_id' => $mahasiswaMataKuliahId]);
+
+        return view('attendance.index', compact('attendance', 'mahasiswaMataKuliahId'));
+    }
+
+public function printMahasiswa($mahasiswaMataKuliahId)
+{
+            // Fetch attendance record or create a new one if it doesn't exist
+            $attendance = AbsensiMahasiswaMataKuliahPraktikum::firstOrNew(['mahasiswa_mata_kuliah_praktikum_id' => $mahasiswaMataKuliahId]);
+
+            return view('attendance.print', compact('attendance', 'mahasiswaMataKuliahId'));
+}
+
+    public function update(Request $request, $mahasiswaMataKuliahId)
+    {
+        // Validate the request
+        $request->validate([
+            'pertemuan_1' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_2' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_3' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_4' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_5' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_6' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_7' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_8' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_9' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_10' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+        ]);
+
+        // Find or create the attendance record
+        $attendance = AbsensiMahasiswaMataKuliahPraktikum::updateOrCreate(
+            ['mahasiswa_mata_kuliah_praktikum_id' => $mahasiswaMataKuliahId],
+            $request->only([
+                'pertemuan_1',
+                'pertemuan_2',
+                'pertemuan_3',
+                'pertemuan_4',
+                'pertemuan_5',
+                'pertemuan_6',
+                'pertemuan_7',
+                'pertemuan_8',
+                'pertemuan_9',
+                'pertemuan_10',
+            ])
+        );
+
+        return redirect()->back()->with('success', 'Attendance updated successfully!');
     }
 
     /**
@@ -27,6 +70,17 @@ class AbsensiMahasiswaMataKuliahPraktikumController extends Controller
     public function store(Request $request)
     {
         // Implement store logic here if needed
+    }
+
+    //
+    //
+    //
+
+    public function index()
+    {
+        $mataKuliahPraktikum = MataKuliahPraktikum::all();
+
+        return view('kehadiran.index', compact('mataKuliahPraktikum'));
     }
 
     /**
@@ -154,17 +208,6 @@ class AbsensiMahasiswaMataKuliahPraktikumController extends Controller
     }
 
 
-
-    /**
-     * Update the attendance for the specified mahasiswa mata kuliah praktikum.
-     */
-    /**
-     * Update attendance for the specified mahasiswa mata kuliah praktikum.
-     */
-    public function update(Request $request, $id)
-    {
-
-    }
 
     /**
      * Remove the specified attendance record from storage.

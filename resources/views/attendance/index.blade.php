@@ -8,20 +8,37 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5>Update Absensi</h5>
+
+                    <a href="{{ route('attendance.print', $mahasiswaMataKuliahId) }}"
+                        class="btn btn-info btn-sm">
+                        <i class="fas fa-paper-plane"></i> Print
+                    </a>
                 </div>
                 <div class="card-body">
-                    @for ($i = 1; $i <= 10; $i++)
-                        <div class="form-group">
-                            <label for="pertemuan_{{ $i }}">Pertemuan {{ $i }}</label>
-                            <select name="pertemuan_{{ $i }}" id="pertemuan_{{ $i }}" class="form-control">
-                                <option value="Hadir" {{ $attendance->{'pertemuan_' . $i} == 'Hadir' ? 'selected' : '' }}>Hadir</option>
-                                <option value="Sakit" {{ $attendance->{'pertemuan_' . $i} == 'Sakit' ? 'selected' : '' }}>Sakit</option>
-                                <option value="Izin" {{ $attendance->{'pertemuan_' . $i} == 'Izin' ? 'selected' : '' }}>Izin</option>
-                                <option value="Alpa" {{ $attendance->{'pertemuan_' . $i} == 'Alpa' ? 'selected' : '' }}>Alpa</option>
-                                <option value="Tidak Ada Keterangan" {{ $attendance->{'pertemuan_' . $i} == 'Tidak Ada Keterangan' ? 'selected' : '' }}>Tidak Ada Keterangan</option>
-                            </select>
-                        </div>
-                    @endfor
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Pertemuan</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for ($i = 1; $i <= 10; $i++)
+                                <tr>
+                                    <td>Pertemuan {{ $i }}</td>
+                                    <td>
+                                        <select name="pertemuan_{{ $i }}" id="pertemuan_{{ $i }}" class="form-control">
+                                            <option value="Hadir" {{ $attendance->{'pertemuan_' . $i} == 'Hadir' ? 'selected' : '' }}>Hadir</option>
+                                            <option value="Sakit" {{ $attendance->{'pertemuan_' . $i} == 'Sakit' ? 'selected' : '' }}>Sakit</option>
+                                            <option value="Izin" {{ $attendance->{'pertemuan_' . $i} == 'Izin' ? 'selected' : '' }}>Izin</option>
+                                            <option value="Alpa" {{ $attendance->{'pertemuan_' . $i} == 'Alpa' ? 'selected' : '' }}>Alpa</option>
+                                            <option value="Tidak Ada Keterangan" {{ $attendance->{'pertemuan_' . $i} == 'Tidak Ada Keterangan' ? 'selected' : '' }}>Tidak Ada Keterangan</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            @endfor
+                        </tbody>
+                    </table>
                     <button type="submit" class="btn btn-primary">Update Absensi</button>
                 </div>
             </div>

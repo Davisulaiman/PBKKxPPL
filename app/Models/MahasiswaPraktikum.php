@@ -14,11 +14,13 @@ class MahasiswaPraktikum extends Model
     /**
      * Define the relationship with MataKuliahPraktikum.
      */
-    public function mataKuliahPraktikum()
-    {
-        return $this->belongsToMany(MataKuliahPraktikum::class, 'mahasiswa_mata_kuliah_praktikum')
-                    ->withPivot('id'); // Include pivot fields if needed
-    }
+// In MahasiswaPraktikum.php
+public function mataKuliahPraktikum()
+{
+    return $this->belongsToMany(MataKuliahPraktikum::class, 'mahasiswa_mata_kuliah_praktikum')
+        ->withPivot('id'); // Pivot table relationship, without a separate model
+}
+
 
     /**
      * Define the relationship with AbsensiMahasiswaMataKuliahPraktikum.

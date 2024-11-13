@@ -46,8 +46,15 @@ class AbsensiMahasiswaMataKuliahPraktikum extends Model
     /**
      * Define the relationship with the MahasiswaPraktikum model through the pivot.
      */
+    // public function mataKuliahPraktikum()
+    // {
+    //     return $this->belongsToMany(MataKuliahPraktikum::class, 'mahasiswa_mata_kuliah_praktikum')
+    //                 ->withPivot('id'); // Include pivot fields if needed
+    // }
+
     public function mahasiswaMataKuliahPraktikum()
     {
-        return $this->belongsTo(MahasiswaPraktikum::class, 'mahasiswa_mata_kuliah_praktikum_id');
+        return $this->belongsTo(MahasiswaMataKuliahPraktikum::class);
     }
+
 }

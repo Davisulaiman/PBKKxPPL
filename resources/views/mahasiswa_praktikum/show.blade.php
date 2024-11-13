@@ -125,6 +125,7 @@
                                             data-bs-target="#deleteModal{{ $mahasiswa->id }}">
                                             <i class="fas fa-trash-alt"></i> Hapus
                                         </button>
+                                        
                                         <a href="{{ route('attendance.index', $mahasiswa->pivot->id) }}"
                                             class="btn btn-info btn-sm">
                                             <i class="fas fa-check"></i> Presensi

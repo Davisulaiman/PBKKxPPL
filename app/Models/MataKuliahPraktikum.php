@@ -19,7 +19,7 @@ class MataKuliahPraktikum extends Model
     public function mahasiswaPraktikum()
     {
         return $this->belongsToMany(MahasiswaPraktikum::class, 'mahasiswa_mata_kuliah_praktikum')
-                    ->withPivot('id'); // Include pivot fields if needed
+            ->withPivot('id'); // Pivot table relationship, without a separate model
     }
 
     /**

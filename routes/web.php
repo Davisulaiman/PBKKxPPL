@@ -8,6 +8,8 @@ use App\Http\Controllers\AsistenPraktikumController;
 use App\Http\Controllers\MahasiswaPraktikumController;
 use App\Http\Controllers\MataKuliahPraktikumController;
 use App\Http\Controllers\AsistenPraktikumPraktikumController;
+use App\Http\Controllers\LaboranController;
+
 
 // Default landing pages
 Route::get('/', function () {
@@ -27,6 +29,13 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    //Resources routes for kepala_lab role
+    Route::middleware('role:kepala_lab')->group(function () {
+        Route::resource('laboran', LaboranController::class);
+    });
+
 
     // Resource routes for laboran role
     Route::middleware('role:laboran')->group(function () {

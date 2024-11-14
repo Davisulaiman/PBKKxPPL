@@ -22,7 +22,7 @@
                             <p class="card-text">Kelola data laboran</p>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="text-white text-decoration-none" href="{{ url('/kelola_laboran') }}">Lihat Detail</a>
+                            <a class="text-white text-decoration-none" href="{{ url('/laboran') }}">Lihat Detail</a>
                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                         </div>
                     </div>

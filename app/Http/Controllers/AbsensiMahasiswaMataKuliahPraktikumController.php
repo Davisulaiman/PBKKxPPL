@@ -75,13 +75,14 @@ public function printMahasiswa($mahasiswaMataKuliahId)
     //
     //
     //
-
     public function index()
     {
-        $mataKuliahPraktikum = MataKuliahPraktikum::all();
-
+        $user = auth()->user();
+        $asisten = $user->asistenPraktikum;
+        $mataKuliahPraktikum = $asisten ? $asisten->mataKuliahPraktikum : collect(); // Mengambil data atau koleksi kosong jika tidak ada
         return view('kehadiran.index', compact('mataKuliahPraktikum'));
     }
+
 
     /**
      * Display the specified attendance record.

@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\AbsensiMahasiswaMataKuliahPraktikumController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LaboranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AsistenPraktikumController;
+use App\Http\Controllers\LaporanPraktikumController;
 use App\Http\Controllers\MahasiswaPraktikumController;
 use App\Http\Controllers\MataKuliahPraktikumController;
 use App\Http\Controllers\AsistenPraktikumPraktikumController;
-use App\Http\Controllers\LaboranController;
+use App\Http\Controllers\AbsensiMahasiswaMataKuliahPraktikumController;
 
 
 // Default landing pages
@@ -18,6 +19,10 @@ Route::get('/', function () {
 
 Route::get('/landingpage', function () {
     return view('landingpage');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['index', 'create', 'store']);
 });
 
 // Middleware for authenticated users with specific roles

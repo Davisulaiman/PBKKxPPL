@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i = 1; $i <= 10; $i++)
+                            @for ($i = 1; $i <= 16; $i++)
                                 <tr>
                                     <td>Pertemuan {{ $i }}</td>
                                     <td>

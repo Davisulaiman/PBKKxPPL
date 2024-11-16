@@ -35,6 +35,12 @@ return new class extends Migration
             $table->enum('pertemuan_8', $statuses)->default($defaultStatus);
             $table->enum('pertemuan_9', $statuses)->default($defaultStatus);
             $table->enum('pertemuan_10', $statuses)->default($defaultStatus);
+            $table->enum('pertemuan_11', $statuses)->default($defaultStatus);
+            $table->enum('pertemuan_12', $statuses)->default($defaultStatus);
+            $table->enum('pertemuan_13', $statuses)->default($defaultStatus);
+            $table->enum('pertemuan_14', $statuses)->default($defaultStatus);
+            $table->enum('pertemuan_15', $statuses)->default($defaultStatus);
+            $table->enum('pertemuan_16', $statuses)->default($defaultStatus);
 
             $table->timestamps();
         });

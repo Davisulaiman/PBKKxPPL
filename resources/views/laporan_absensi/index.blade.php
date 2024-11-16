@@ -16,7 +16,7 @@
                             <th>No</th>
                             <th>NPM</th>
                             <th>Nama Mahasiswa</th>
-                            @for ($i = 1; $i <= 10; $i++)
+                            @for ($i = 1; $i <= 16; $i++)
                                 <th>Pertemuan {{ $i }}</th>
                             @endfor
                         </tr>

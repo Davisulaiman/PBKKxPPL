@@ -22,6 +22,12 @@ class AbsensiMahasiswaMataKuliahPraktikum extends Model
         'pertemuan_8',
         'pertemuan_9',
         'pertemuan_10',
+        'pertemuan_11',
+        'pertemuan_12',
+        'pertemuan_13',
+        'pertemuan_14',
+        'pertemuan_15',
+        'pertemuan_16',
     ];
 
     // Define constants for attendance status

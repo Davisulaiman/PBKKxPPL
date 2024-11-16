@@ -42,6 +42,12 @@ public function printMahasiswa($mahasiswaMataKuliahId)
             'pertemuan_8' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
             'pertemuan_9' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
             'pertemuan_10' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_11' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_12' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_13' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_14' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_15' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
+            'pertemuan_16' => 'required|in:Hadir,Sakit,Izin,Alpa,Tidak Ada Keterangan',
         ]);
 
         // Find or create the attendance record
@@ -58,6 +64,12 @@ public function printMahasiswa($mahasiswaMataKuliahId)
                 'pertemuan_8',
                 'pertemuan_9',
                 'pertemuan_10',
+                'pertemuan_11',
+                'pertemuan_12',
+                'pertemuan_13',
+                'pertemuan_14',
+                'pertemuan_15',
+                'pertemuan_16',
             ])
         );
 

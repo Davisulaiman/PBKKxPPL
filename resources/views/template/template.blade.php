@@ -117,7 +117,7 @@
                             <div class="collapse" id="collapseLaporan" aria-labelledby="headingTwo"
                                  data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ url('/laporan-presensi') }}">
+                                    <a class="nav-link" href="{{ url('/laporan_absensi') }}">
                                         Laporan Presensi
                                     </a>
                                     <a class="nav-link" href="{{ url('/laporan-praktikum') }}">

@@ -44,11 +44,16 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
         Route::resource('mahasiswa_praktikum', MahasiswaPraktikumController::class);
         Route::post('/import-mahasiswa/{mataKuliahPraktikumId}', [MahasiswaPraktikumController::class, 'import'])->name('import.mahasiswa');
         Route::delete('/mahasiswa_praktikum/delete_all/{mataKuliah}', [MahasiswaPraktikumController::class, 'deleteAll'])->name('mahasiswa_praktikum.deleteAll');
-         // Route to display attendance form
-         Route::get('/attendance/{mahasiswaMataKuliahId}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'indexMahasiswa'])->name('attendance.index');
-         Route::get('/attendance/{mahasiswaMataKuliahId}/print', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'printMahasiswa'])->name('attendance.print');
-         // Route to update attendance
-         Route::post('/attendance/{mahasiswaMataKuliahId}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'update'])->name('attendance.update');
+        // Route to display attendance form
+        Route::get('/attendance/{mahasiswaMataKuliahId}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'indexMahasiswa'])->name('attendance.index');
+        Route::get('/attendance/{mahasiswaMataKuliahId}/print', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'printMahasiswa'])->name('attendance.print');
+        // Route to update attendance
+        Route::post('/attendance/{mahasiswaMataKuliahId}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'update'])->name('attendance.update');
+    });
+
+    // Resources routes for kepala_lab & laboran role
+    Route::middleware(['role:kepala_lab,laboran'])->group(function () {
+        Route::get('/absensi_praktikum/{mataKuliahId}/laporan', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'showLaporanPresensi'])->name('laporan.absensi');
     });
 
     // Attendance routes for asisten dosen

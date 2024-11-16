@@ -208,6 +208,21 @@ public function printMahasiswa($mahasiswaMataKuliahId)
         return redirect()->back()->with('success', 'Absensi updated successfully for pertemuan ' . $pertemuan);
     }
 
+    public function __construct()
+    {
+        // Middleware untuk memastikan hanya Kepala Laboran dan Laboran yang bisa mengakses laporan presensi
+        $this->middleware('role:kepala_lab,laboran')->only('showLaporanPresensi');
+    }
+
+    public function showLaporanPresensi($mataKuliahId)
+    {
+        // Ambil data dari model terkait
+        $mataKuliah = MataKuliahPraktikum::findOrFail($mataKuliahId);
+        $mahasiswaStatusAbsensi = $mataKuliah->mahasiswaPraktikum;
+
+        // Kirim data ke view di folder laporan_absensi
+        return view('laporan_absensi.index', compact('mataKuliah', 'mahasiswaStatusAbsensi'));
+    }
 
 
     /**

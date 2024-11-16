@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('mahasiswa_praktikums', function (Blueprint $table) {
             $table->id();
 
+            // Kolom NPM dengan panjang maksimum 10 karakter
+            $table->string('npm', 10)->unique();
+
             // Kolom nama mahasiswa
             $table->string('nama');
 
-            // Kolom NPM dengan panjang maksimum 10 karakter
-            $table->string('npm', 10)->unique();
 
             // Timestamps
             $table->timestamps();

@@ -15,12 +15,13 @@ class MahasiswaPraktikumController extends Controller
      */
     public function index()
     {
-        // Fetch all mahasiswa praktikum records
-
+        // Fetch all mata kuliah and mahasiswa records
         $mataKuliahPraktikum = MataKuliahPraktikum::all();
-        return view('mahasiswa_praktikum.index', compact('mataKuliahPraktikum')); // Return the index view with data
+        $mahasiswas = MahasiswaPraktikum::all();
 
+        return view('mahasiswa_praktikum.index', compact('mataKuliahPraktikum', 'mahasiswas'));
     }
+
     /**
      * Show the form for creating a new resource.
      */

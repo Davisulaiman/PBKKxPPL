@@ -67,10 +67,10 @@ class LaboranController extends Controller
         // Validasi input data untuk update
         $request->validate([
             'nama' => 'required',
-            'username' => 'required|unique:users,username,' . $id, // Menghindari konflik dengan username saat update
-            'email' => 'required|unique:users,email,' . $id,       // Menghindari konflik dengan email saat update
+            'username' => 'required|unique:users,name',
+            'email' => 'required|unique:users,email',
         ]);
-
+        
         // Temukan Laboran berdasarkan ID
         $laboran = Laboran::findOrFail($id);
         $user = $laboran->user;

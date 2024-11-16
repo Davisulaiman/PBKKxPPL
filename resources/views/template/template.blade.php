@@ -74,7 +74,7 @@
 
                         <!-- Kepala Lab Menu -->
                         @if (Auth::user()->role == 'kepala_lab')
-                            <a class="nav-link" href="{{ url('/kelola_laboran') }}">
+                            <a class="nav-link" href="{{ url('/laboran') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-users-cog me-2"></i></div>
                                 Kelola Laboran
                             </a>

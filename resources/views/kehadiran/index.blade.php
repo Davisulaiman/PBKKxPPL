@@ -4,8 +4,9 @@
     <div class="container-fluid px-4">
         <h1 class="mt-4">Absensi Praktikum</h1>
 
+        <!-- Tampilkan mata kuliah hanya terkait dengan asisten dosen yang login -->
         <div class="row">
-            @foreach($mataKuliahPraktikum as $mataKuliah)
+            @forelse($mataKuliahPraktikum as $mataKuliah)
                 <div class="col-xl-6 col-md-6 mb-4">
                     <a href="{{ url('/absensi_praktikum/' . $mataKuliah->id) }}" class="text-decoration-none">
                         <div class="card h-100">
@@ -27,7 +28,13 @@
                         </div>
                     </a>
                 </div>
-            @endforeach
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        Tidak ada mata kuliah yang tersedia untuk Anda.
+                    </div>
+                </div>
+            @endforelse
         </div>
     </div>
 @endsection

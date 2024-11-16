@@ -105,8 +105,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama</th>
                                 <th>NPM</th>
+                                <th>Nama</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -114,8 +114,8 @@
                             @forelse ($mahasiswas as $index => $mahasiswa)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $mahasiswa->nama }}</td>
                                     <td>{{ $mahasiswa->npm }}</td>
+                                    <td>{{ $mahasiswa->nama }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('mahasiswa_praktikum.edit', $mahasiswa->id) }}"
                                             class="btn btn-warning btn-sm">
@@ -125,7 +125,7 @@
                                             data-bs-target="#deleteModal{{ $mahasiswa->id }}">
                                             <i class="fas fa-trash-alt"></i> Hapus
                                         </button>
-                                        
+
                                         <a href="{{ route('attendance.index', $mahasiswa->pivot->id) }}"
                                             class="btn btn-info btn-sm">
                                             <i class="fas fa-check"></i> Presensi

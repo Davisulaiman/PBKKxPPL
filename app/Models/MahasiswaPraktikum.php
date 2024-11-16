@@ -9,7 +9,7 @@ class MahasiswaPraktikum extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama', 'npm'];
+    protected $fillable = ['npm', 'nama'];
 
     /**
      * Define the relationship with MataKuliahPraktikum.

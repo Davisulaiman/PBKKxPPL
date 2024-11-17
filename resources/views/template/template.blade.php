@@ -120,7 +120,7 @@
                                     <a class="nav-link" href="{{ url('/laporan_absensi') }}">
                                         Laporan Presensi
                                     </a>
-                                    <a class="nav-link" href="{{ url('/laporan-praktikum') }}">
+                                    <a class="nav-link" href="{{ url('/laporan_praktikum') }}">
                                         Laporan Praktikum
                                     </a>
                                 </nav>

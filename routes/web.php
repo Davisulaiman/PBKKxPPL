@@ -21,8 +21,10 @@ Route::get('/landingpage', function () {
     return view('landingpage');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['index', 'create', 'store']);
+Route::middleware(['auth', 'role:laboran,kepala_lab'])->group(function () {
+    Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+
+    Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])->name('laporan_praktikum.print');
 });
 
 // Middleware for authenticated users with specific roles

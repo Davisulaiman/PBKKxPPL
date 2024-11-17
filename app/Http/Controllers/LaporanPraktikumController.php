@@ -47,6 +47,7 @@ class LaporanPraktikumController extends Controller
         $request->validate([
             'mata_kuliah_praktikum_id' => 'required|exists:mata_kuliah_praktikums,id',
             'pertemuan' => 'required|integer|min:1|max:16',
+            'tanggal_praktikum' => 'required|date',
             'materi' => 'required|string',
             'bukti_praktikum' => 'nullable|url'
         ]);
@@ -54,6 +55,7 @@ class LaporanPraktikumController extends Controller
         LaporanPraktikum::create([
             'mata_kuliah_praktikum_id' => $request->mata_kuliah_praktikum_id,
             'pertemuan' => $request->pertemuan,
+            'tanggal_praktikum' => $request->tanggal_praktikum,
             'materi' => $request->materi,
             'bukti_praktikum' => $request->bukti_praktikum, // Perbaikan pada nama input
             'created_by' => Auth::id()
@@ -67,6 +69,7 @@ class LaporanPraktikumController extends Controller
      */
     public function show(string $id)
     {
+        // dd('lorem');
         // Retrieve MataKuliahPraktikum by ID
         $mataKuliah = MataKuliahPraktikum::findOrFail($id);
 
@@ -117,5 +120,14 @@ class LaporanPraktikumController extends Controller
         $laporanPraktikum->delete();
 
         return redirect()->route('laporan_praktikum.index')->with('success', 'Laporan praktikum berhasil dihapus.');
+    }
+
+    public function print(int $mata_kuliah_id, int $pertemuan)
+    {
+        return view('laporan_praktikum.print', [
+            'mata_kuliah_id' => $mata_kuliah_id,
+            'pertemuan' => $pertemuan,
+            'laporan' => LaporanPraktikum::where('mata_kuliah_praktikum_id', $mata_kuliah_id)->where('pertemuan', $pertemuan)->first()
+        ]);
     }
 }

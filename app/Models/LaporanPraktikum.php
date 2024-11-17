@@ -14,6 +14,7 @@ class LaporanPraktikum extends Model
     protected $fillable = [
         'mata_kuliah_praktikum_id',
         'pertemuan',
+        'tanggal_praktikum',
         'materi',
         'bukti_praktikum',
         'created_by'

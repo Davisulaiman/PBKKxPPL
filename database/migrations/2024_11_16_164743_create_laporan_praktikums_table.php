@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('mata_kuliah_praktikum_id');
             $table->integer('pertemuan');
             $table->string('materi');
+            $table->date('tanggal_praktikum');
             $table->string('bukti_praktikum')->nullable();
             $table->unsignedBigInteger('created_by'); // user ID who created the report
             $table->timestamps();

@@ -10,6 +10,7 @@ use App\Http\Controllers\MahasiswaPraktikumController;
 use App\Http\Controllers\MataKuliahPraktikumController;
 use App\Http\Controllers\AsistenPraktikumPraktikumController;
 use App\Http\Controllers\AbsensiMahasiswaMataKuliahPraktikumController;
+use App\Http\Controllers\PenilaianPraktikumController;
 
 
 // Default landing pages
@@ -23,6 +24,12 @@ Route::get('/landingpage', function () {
 
 Route::middleware(['auth', 'role:laboran,kepala_lab'])->group(function () {
     Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+
+    Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])->name('laporan_praktikum.print');
+});
+
+Route::middleware(['auth', 'role:asisten_dosen'])->group(function () {
+    Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['create']);
 
     Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])->name('laporan_praktikum.print');
 });
@@ -74,6 +81,20 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
         // Route to update attendance
         Route::post('/absensi_praktikum/update', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'asistenPraktikumUpdate'])->name('attendance.asisten_dosen.update');
     });
+
+    Route::middleware(['auth', 'role:asisten_dosen'])->group(function () {
+        // Route to display the form to create Penilaian Praktikum
+        Route::get('penilaian_praktikum/create', [PenilaianPraktikumController::class, 'create'])->name('penilaian_praktikum.create');
+        // Route to store Penilaian Praktikum
+        Route::post('penilaian_praktikum', [PenilaianPraktikumController::class, 'store'])->name('penilaian_praktikum.store');
+        Route::get('/penilaian-praktikum/download-template', [PenilaianPraktikumController::class, 'downloadTemplate'])->name('penilaian_praktikum.download_template');
+    });
+
+    Route::middleware(['auth', 'role:kepala_lab,laboran,asisten_dosen'])->group(function () {
+        // Route to view Penilaian Praktikum (List view)
+        Route::get('penilaian_praktikum', [PenilaianPraktikumController::class, 'index'])->name('penilaian_praktikum.index');
+    });
+
 });
 
 // Load authentication routes

@@ -29,4 +29,10 @@ class MataKuliahPraktikum extends Model
     {
         return $this->belongsToMany(AsistenPraktikum::class, 'asisten_praktikum_mata_kuliah_praktikum');
     }
+
+    public function penilaianPraktikum()
+{
+    return $this->hasMany(PenilaianPraktikum::class, 'mata_kuliah_praktikum_id');
+}
+
 }

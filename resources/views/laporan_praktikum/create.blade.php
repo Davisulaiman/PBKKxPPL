@@ -17,6 +17,9 @@
         <label for="materi">Materi:</label>
         <input type="text" name="materi" required>
 
+        <label for="tanggal_praktikum">Tanggal Praktikum:</label>
+        <input type="date" name="tanggal_praktikum" required>
+
         <label for="foto_link">Foto (Link Google Drive):</label>
         <input type="url" name="foto_link">
 

@@ -17,21 +17,27 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>Nomor</th>
                             <th>Pertemuan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for ($i = 1; $i <= 16; $i++)
-                            @php
-                                $pertemuanField = 'pertemuan_' . $i;
-                            @endphp
                             <tr>
+                                <td>{{ $i }}</td>
                                 <td>Pertemuan {{ $i }}</td>
                                 <td>
+                                    @if (Auth::user()->role == 'asisten_dosen')
+                                        <a href="{{ route('laporan_praktikum.create', ['mata_kuliah_id' => $mataKuliah->id, 'pertemuan' => $i]) }}"
+                                           class="btn btn-success">
+                                            <i class="fas fa-plus"></i> Buat Laporan
+                                        </a>
+                                    @endif
+
                                     <a class="text-white text-decoration-none btn btn-primary"
                                        href="{{ url('/laporan_praktikum/' . $mataKuliah->id . '/' . $i) }}">
-                                        Lihat Laporan
+                                        <i class="fas fa-file-alt"></i> Lihat Laporan
                                     </a>
                                 </td>
                             </tr>

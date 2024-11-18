@@ -27,14 +27,10 @@ class LaporanPraktikumController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($mata_kuliah_id, $pertemuan)
     {
-        // Only accessible for assistant_dosen
-        $this->authorize('create', LaporanPraktikum::class);
-
-        // Ambil mata kuliah untuk dropdown atau pilihan lainnya
-        $mataKuliahPraktikum = MataKuliahPraktikum::all();
-        return view('laporan_praktikum.create', compact('mataKuliahPraktikum'));
+        $mataKuliahPraktikum = MataKuliahPraktikum::findOrFail($mata_kuliah_id);
+        return view('laporan_praktikum.create', compact('mataKuliahPraktikum', 'pertemuan'));
     }
 
     /**
@@ -42,8 +38,7 @@ class LaporanPraktikumController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', LaporanPraktikum::class);
-
+        // dd($request->all());
         $request->validate([
             'mata_kuliah_praktikum_id' => 'required|exists:mata_kuliah_praktikums,id',
             'pertemuan' => 'required|integer|min:1|max:16',
@@ -61,7 +56,7 @@ class LaporanPraktikumController extends Controller
             'created_by' => Auth::id()
         ]);
 
-        return redirect()->route('laporan_praktikum.index')->with('success', 'Laporan praktikum berhasil ditambahkan.');
+        return redirect()->route('laporan_praktikum.show')->with('success', 'Laporan praktikum berhasil ditambahkan.');
     }
 
     /**

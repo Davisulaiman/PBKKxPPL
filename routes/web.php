@@ -22,18 +22,6 @@ Route::get('/landingpage', function () {
     return view('landingpage');
 });
 
-Route::middleware(['auth', 'role:laboran,kepala_lab'])->group(function () {
-    Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
-
-    Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])->name('laporan_praktikum.print');
-});
-
-Route::middleware(['auth', 'role:asisten_dosen'])->group(function () {
-    Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['create']);
-
-    Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])->name('laporan_praktikum.print');
-});
-
 // Middleware for authenticated users with specific roles
 Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(function () {
     // Unified dashboard route for all roles
@@ -95,6 +83,23 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
         Route::get('penilaian_praktikum', [PenilaianPraktikumController::class, 'index'])->name('penilaian_praktikum.index');
     });
 
+    Route::middleware(['auth', 'role:laboran,kepala_lab,asisten_dosen'])->group(function () {
+        Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['index', 'show']);
+    });
+
+    // Route untuk Asisten Dosen (create)
+    Route::middleware(['auth', 'role:asisten_dosen'])->group(function () {
+        Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['store']);
+
+        Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}/create', [LaporanPraktikumController::class, 'create'])
+        ->name('laporan_praktikum.create');
+    });
+
+    // Route untuk Laboran dan Kepala Lab (view)
+    Route::middleware(['auth', 'role:laboran,kepala_lab'])->group(function () {
+        Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])
+            ->name('laporan_praktikum.print');
+    });
 });
 
 // Load authentication routes

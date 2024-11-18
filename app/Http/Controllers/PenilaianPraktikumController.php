@@ -17,9 +17,12 @@ class PenilaianPraktikumController extends Controller
      */
     public function index()
     {
-        $penilaianPraktikum = PenilaianPraktikum::with('mataKuliahPraktikum')->get();
-        return view('penilaian_praktikum.index', compact('penilaianPraktikum'));
+        $penilaianPraktikum = PenilaianPraktikum::with(['mataKuliahPraktikum' => function($query) {
+            $query->orderBy('kode_mata_kuliah', 'asc')
+                  ->orderBy('kelas', 'asc');
+        }])->get();
 
+        return view('penilaian_praktikum.index', compact('penilaianPraktikum'));
     }
 
     /**

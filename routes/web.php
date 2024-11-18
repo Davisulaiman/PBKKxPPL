@@ -73,14 +73,24 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
     Route::middleware(['auth', 'role:asisten_dosen'])->group(function () {
         // Route to display the form to create Penilaian Praktikum
         Route::get('penilaian_praktikum/create', [PenilaianPraktikumController::class, 'create'])->name('penilaian_praktikum.create');
+
         // Route to store Penilaian Praktikum
         Route::post('penilaian_praktikum', [PenilaianPraktikumController::class, 'store'])->name('penilaian_praktikum.store');
+
+        // Route to download the template
         Route::get('/penilaian-praktikum/download-template', [PenilaianPraktikumController::class, 'downloadTemplate'])->name('penilaian_praktikum.download_template');
+
+        // Route to display the form for editing Penilaian Praktikum
+        Route::get('penilaian_praktikum/{id}/edit', [PenilaianPraktikumController::class, 'edit'])->name('penilaian_praktikum.edit');
+
+        // Route to update Penilaian Praktikum
+        Route::put('penilaian_praktikum/{id}', [PenilaianPraktikumController::class, 'update'])->name('penilaian_praktikum.update');
     });
 
     Route::middleware(['auth', 'role:kepala_lab,laboran,asisten_dosen'])->group(function () {
         // Route to view Penilaian Praktikum (List view)
         Route::get('penilaian_praktikum', [PenilaianPraktikumController::class, 'index'])->name('penilaian_praktikum.index');
+        Route::delete('penilaian_praktikum/{id}', [PenilaianPraktikumController::class, 'destroy'])->name('penilaian_praktikum.destroy');
     });
 
     Route::middleware(['auth', 'role:laboran,kepala_lab,asisten_dosen'])->group(function () {

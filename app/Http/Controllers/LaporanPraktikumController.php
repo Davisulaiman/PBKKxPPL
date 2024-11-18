@@ -36,28 +36,38 @@ class LaporanPraktikumController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        // dd($request->all());
-        $request->validate([
-            'mata_kuliah_praktikum_id' => 'required|exists:mata_kuliah_praktikums,id',
-            'pertemuan' => 'required|integer|min:1|max:16',
-            'tanggal_praktikum' => 'required|date',
-            'materi' => 'required|string',
-            'bukti_praktikum' => 'nullable|url'
-        ]);
 
-        LaporanPraktikum::create([
-            'mata_kuliah_praktikum_id' => $request->mata_kuliah_praktikum_id,
-            'pertemuan' => $request->pertemuan,
-            'tanggal_praktikum' => $request->tanggal_praktikum,
-            'materi' => $request->materi,
-            'bukti_praktikum' => $request->bukti_praktikum, // Perbaikan pada nama input
-            'created_by' => Auth::id()
-        ]);
+     public function store(Request $request)
+{
+    // Debugging log untuk mengecek nilai bukti_praktikum
+    // dd($request->bukti_praktikum);
 
-        return redirect()->route('laporan_praktikum.show')->with('success', 'Laporan praktikum berhasil ditambahkan.');
-    }
+    // $this->authorize('create', LaporanPraktikum::class);
+
+    $request->validate([
+        'mata_kuliah_praktikum_id' => 'required|exists:mata_kuliah_praktikums,id',
+        'pertemuan' => 'required|integer|min:1|max:16',
+        'tanggal_praktikum' => 'required|date',
+        'materi' => 'required|string',
+        'bukti_praktikum' => [
+            'nullable',
+            'url',
+            'regex:/^(https:\/\/drive\.google\.com\/.*)$/'
+        ] // Validasi untuk memastikan bahwa link Google Drive sesuai pola tertentu
+    ]);
+
+    $laporan = LaporanPraktikum::create([
+        'mata_kuliah_praktikum_id' => $request->mata_kuliah_praktikum_id,
+        'pertemuan' => $request->pertemuan,
+        'tanggal_praktikum' => $request->tanggal_praktikum,
+        'materi' => $request->materi,
+        'bukti_praktikum' => $request->bukti_praktikum,
+        'created_by' => Auth::id()
+    ]);
+
+    return redirect()->route('laporan_praktikum.index')->with('success', 'Laporan praktikum berhasil ditambahkan.');
+}
+
 
     /**
      * Display the specified resource.

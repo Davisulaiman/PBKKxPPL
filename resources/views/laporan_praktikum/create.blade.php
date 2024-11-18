@@ -95,7 +95,7 @@
                             <label for="bukti_praktikum" class="form-label">Foto (Link Google Drive):</label>
                             <input
                                 type="url"
-                                name="foto_link"
+                                name="bukti_praktikum"
                                 class="form-control @error('bukti_praktikum') is-invalid @enderror"
                                 value="{{ old('bukti_praktikum') }}"
                             >

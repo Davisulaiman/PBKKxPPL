@@ -85,21 +85,29 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
 
     Route::middleware(['auth', 'role:laboran,kepala_lab,asisten_dosen'])->group(function () {
         Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['index', 'show']);
+        Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])
+        ->name('laporan_praktikum.print');
+
     });
 
     // Route untuk Asisten Dosen (create)
     Route::middleware(['auth', 'role:asisten_dosen'])->group(function () {
+        // Menambahkan route untuk store laporan praktikum
         Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['store']);
 
+        // Menambahkan route untuk create laporan praktikum
         Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}/create', [LaporanPraktikumController::class, 'create'])
-        ->name('laporan_praktikum.create');
+            ->name('laporan_praktikum.create');
+
+        // Menambahkan route untuk edit laporan praktikum
+        Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}/edit', [LaporanPraktikumController::class, 'edit'])
+            ->name('laporan_praktikum.edit');
+
+        // Menambahkan route untuk update laporan praktikum
+        Route::put('/laporan_praktikum/{id}', [LaporanPraktikumController::class, 'update'])
+            ->name('laporan_praktikum.update');
     });
 
-    // Route untuk Laboran dan Kepala Lab (view)
-    Route::middleware(['auth', 'role:laboran,kepala_lab'])->group(function () {
-        Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])
-            ->name('laporan_praktikum.print');
-    });
 });
 
 // Load authentication routes

@@ -37,8 +37,15 @@
                             @endif
                         </td>
                     </tr>
-
                 </table>
+
+                @if(Auth::user()->role === 'asisten_dosen')
+                    <div class="mt-3">
+                        <a href="{{ route('laporan_praktikum.edit', ['mata_kuliah_id' => $mata_kuliah_id, 'pertemuan' => $pertemuan]) }}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit Laporan
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

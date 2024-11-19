@@ -85,12 +85,15 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
 
         // Route to update Penilaian Praktikum
         Route::put('penilaian_praktikum/{id}', [PenilaianPraktikumController::class, 'update'])->name('penilaian_praktikum.update');
+
+
     });
 
     Route::middleware(['auth', 'role:kepala_lab,laboran,asisten_dosen'])->group(function () {
         // Route to view Penilaian Praktikum (List view)
         Route::get('penilaian_praktikum', [PenilaianPraktikumController::class, 'index'])->name('penilaian_praktikum.index');
         Route::delete('penilaian_praktikum/{id}', [PenilaianPraktikumController::class, 'destroy'])->name('penilaian_praktikum.destroy');
+        Route::get('/penilaian_praktikum/export-pdf', [PenilaianPraktikumController::class, 'exportPdf'])->name('penilaian_praktikum.export_pdf');
     });
 
     Route::middleware(['auth', 'role:laboran,kepala_lab,asisten_dosen'])->group(function () {

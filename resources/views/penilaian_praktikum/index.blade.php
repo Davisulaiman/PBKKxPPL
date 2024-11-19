@@ -14,11 +14,19 @@
 
                     <!-- Section for Downloading Template with Styling -->
                     <div class="mb-3 p-3 bg-light border rounded shadow-sm">
-                        <p class="mb-2"><strong>Unduh Template:</strong> Untuk kemudahan penginputan, Anda dapat mengunduh template penilaian praktikum dengan mengklik tombol di bawah:</p>
+                        <p class="mb-2"><strong>Unduh Template:</strong> Untuk kemudahan penginputan, Anda dapat mengunduh
+                            template penilaian praktikum dengan mengklik tombol di bawah:</p>
                         <a href="{{ route('penilaian_praktikum.download_template') }}" class="btn btn-primary">
                             <i class="fas fa-download"></i> Unduh Template Penilaian Praktikum
                         </a>
                     </div>
+                @endif
+
+                <!-- Tombol Export PDF (Hanya untuk Laboran dan Kepala Lab) -->
+                @if (in_array(Auth::user()->role, ['laboran', 'kepala_lab']))
+                    <a href="{{ route('penilaian_praktikum.export_pdf') }}" class="btn btn-info mb-3">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </a>
                 @endif
 
                 <!-- Tabel Penilaian Praktikum dengan Responsiveness -->
@@ -35,7 +43,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($penilaianPraktikum as $index => $penilaian)
+                            @foreach ($penilaianPraktikum as $index => $penilaian)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $penilaian->mataKuliahPraktikum->kode_mata_kuliah }}</td>
@@ -47,16 +55,19 @@
                                     <td>
                                         <!-- Tombol Edit (Hanya untuk Asisten Dosen) -->
                                         @if (Auth::user()->role == 'asisten_dosen')
-                                            <a href="{{ route('penilaian_praktikum.edit', $penilaian->id) }}" class="btn btn-warning btn-sm">
+                                            <a href="{{ route('penilaian_praktikum.edit', $penilaian->id) }}"
+                                                class="btn btn-warning btn-sm">
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>
                                         @endif
 
                                         <!-- Tombol Hapus (Dapat Diakses Semua Role) -->
-                                        <form action="{{ route('penilaian_praktikum.destroy', $penilaian->id) }}" method="POST" style="display:inline;">
+                                        <form action="{{ route('penilaian_praktikum.destroy', $penilaian->id) }}"
+                                            method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                                 <i class="fas fa-trash"></i> Hapus
                                             </button>
                                         </form>
@@ -68,7 +79,7 @@
                 </div>
 
                 <!-- Jika Tidak Ada Data -->
-                @if($penilaianPraktikum->isEmpty())
+                @if ($penilaianPraktikum->isEmpty())
                     <div class="alert alert-warning">
                         Tidak ada data penilaian praktikum.
                     </div>

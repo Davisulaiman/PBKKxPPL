@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\PenilaianPraktikum;
 use App\Models\MataKuliahPraktikum;
 use Illuminate\Http\Request;
@@ -17,26 +18,37 @@ class PenilaianPraktikumController extends Controller
      */
     public function index()
     {
-        $penilaianPraktikum = PenilaianPraktikum::with(['mataKuliahPraktikum' => function($query) {
-            $query->orderBy('kode_mata_kuliah', 'asc')
-                  ->orderBy('kelas', 'asc');
-        }])->get();
+        $user = auth()->user();
+
+        // Cek peran pengguna: asisten_dosen, laboran, atau kepala_lab
+        if ($user->role === 'asisten_dosen') {
+            // Ambil mata kuliah hanya terkait dengan asisten dosen yang login
+            $penilaianPraktikum = PenilaianPraktikum::whereHas('mataKuliahPraktikum', function ($query) use ($user) {
+                $query->whereIn('id', $user->asistenPraktikum->mataKuliahPraktikum->pluck('id')); // Sesuaikan dengan relasi
+            })->with(['mataKuliahPraktikum'])->get();
+        } else {
+            // Laboran dan Kepala Lab dapat melihat semua penilaian
+            $penilaianPraktikum = PenilaianPraktikum::with(['mataKuliahPraktikum' => function($query) {
+                $query->orderBy('kode_mata_kuliah', 'asc')
+                      ->orderBy('kelas', 'asc');
+            }])->get();
+        }
 
         return view('penilaian_praktikum.index', compact('penilaianPraktikum'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $mataKuliahPraktikum = MataKuliahPraktikum::all();
+        $user = auth()->user();
+
+        // Hanya ambil mata kuliah terkait untuk asisten dosen yang login
+        $mataKuliahPraktikum = $user->role === 'asisten_dosen'
+            ? $user->asistenPraktikum->mataKuliahPraktikum ?? collect()
+            : MataKuliahPraktikum::all();
+
         return view('penilaian_praktikum.create', compact('mataKuliahPraktikum'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -47,40 +59,70 @@ class PenilaianPraktikumController extends Controller
                 'regex:/^(https:\/\/drive\.google\.com\/.*)$/'
             ],
         ]);
+
+        $user = auth()->user();
+
+        // Validasi tambahan untuk memastikan asisten dosen hanya mengakses mata kuliah yang terkait
+        if ($user->role === 'asisten_dosen' && !$user->asistenPraktikum->mataKuliahPraktikum->pluck('id')->contains($request->mata_kuliah_praktikum_id)) {
+            abort(403, 'Anda tidak memiliki akses untuk mata kuliah ini.');
+        }
+
         PenilaianPraktikum::create($request->all());
         return redirect()->route('penilaian_praktikum.index')->with('success', 'Penilaian Praktikum berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $penilaianPraktikum = PenilaianPraktikum::findOrFail($id);
+        $user = auth()->user();
+
+        // Cek akses untuk asisten dosen
+        if ($user->role === 'asisten_dosen' && !$user->asistenPraktikum->mataKuliahPraktikum->pluck('id')->contains($penilaianPraktikum->mata_kuliah_praktikum_id)) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit penilaian ini.');
+        }
+
+        $mataKuliahPraktikum = $user->role === 'asisten_dosen'
+            ? $user->asistenPraktikum->mataKuliahPraktikum ?? collect()
+            : MataKuliahPraktikum::all();
+
+        return view('penilaian_praktikum.edit', compact('penilaianPraktikum', 'mataKuliahPraktikum'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $penilaianPraktikum = PenilaianPraktikum::findOrFail($id);
+        $user = auth()->user();
+
+        // Cek akses untuk asisten dosen
+        if ($user->role === 'asisten_dosen' && !$user->asistenPraktikum->mataKuliahPraktikum->pluck('id')->contains($penilaianPraktikum->mata_kuliah_praktikum_id)) {
+            abort(403, 'Anda tidak memiliki akses untuk mengupdate penilaian ini.');
+        }
+
+        $request->validate([
+            'mata_kuliah_praktikum_id' => 'required|exists:mata_kuliah_praktikums,id',
+            'google_drive_link' => [
+                'required',
+                'url',
+                'regex:/^(https:\/\/drive\.google\.com\/.*)$/'
+            ],
+        ]);
+
+        $penilaianPraktikum->update($request->all());
+        return redirect()->route('penilaian_praktikum.index')->with('success', 'Penilaian Praktikum berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $penilaianPraktikum = PenilaianPraktikum::findOrFail($id);
+        $user = auth()->user();
+
+        // Cek akses untuk asisten dosen
+        if ($user->role === 'asisten_dosen' && !$user->asistenPraktikum->mataKuliahPraktikum->pluck('id')->contains($penilaianPraktikum->mata_kuliah_praktikum_id)) {
+            abort(403, 'Anda tidak memiliki akses untuk menghapus penilaian ini.');
+        }
+
+        $penilaianPraktikum->delete();
+        return redirect()->route('penilaian_praktikum.index')->with('success', 'Penilaian Praktikum berhasil dihapus.');
     }
 
     public function downloadTemplate()
@@ -88,5 +130,23 @@ class PenilaianPraktikumController extends Controller
         $filePath = public_path('template_file/TEMPLATE PENILAIAN PRAKTIKUM.xlsx');
         return response()->download($filePath);
     }
+    public function exportPdf()
+    {
+        $user = auth()->user();
 
-}
+        // Allow only 'laboran' and 'kepala_lab' roles to access this functionality
+        if (!in_array($user->role, ['laboran', 'kepala_lab'])) {
+            abort(403, 'Anda tidak memiliki izin untuk mengekspor PDF.');
+        }
+
+        // Retrieve the data to be used in the PDF with the same ordering as in the index method
+        $penilaianPraktikum = PenilaianPraktikum::with(['mataKuliahPraktikum' => function($query) {
+            $query->orderBy('kode_mata_kuliah', 'asc')
+                  ->orderBy('kelas', 'asc');
+        }])->get();
+
+        // Generate and download the PDF
+        $pdf = PDF::loadView('penilaian_praktikum.pdf', compact('penilaianPraktikum'));
+        return $pdf->download('penilaian_praktikum.pdf');
+    }
+    }

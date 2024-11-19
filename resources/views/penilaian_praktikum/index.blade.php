@@ -12,10 +12,13 @@
                         <i class="fas fa-plus"></i> Tambah Penilaian Praktikum
                     </a>
 
-                    <!-- Tombol Download Template Excel -->
-                    <a href="{{ route('penilaian_praktikum.download_template') }}" class="btn btn-primary mb-3">
-                        <i class="fas fa-download"></i> Download Template Penilaian Praktikum
-                    </a>
+                    <!-- Section for Downloading Template with Styling -->
+                    <div class="mb-3 p-3 bg-light border rounded shadow-sm">
+                        <p class="mb-2"><strong>Unduh Template:</strong> Untuk kemudahan penginputan, Anda dapat mengunduh template penilaian praktikum dengan mengklik tombol di bawah:</p>
+                        <a href="{{ route('penilaian_praktikum.download_template') }}" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Unduh Template Penilaian Praktikum
+                        </a>
+                    </div>
                 @endif
 
                 <!-- Tabel Penilaian Praktikum dengan Responsiveness -->

@@ -14,14 +14,18 @@ class LaporanPraktikumController extends Controller
      */
     public function index()
     {
-        // Ambil hanya mata kuliah terkait dengan user yang login (misalnya sebagai asisten dosen)
-        $userId = Auth::id(); // Dapatkan user yang login
-        $mataKuliahPraktikum = MataKuliahPraktikum::all();
+        $user = auth()->user();
 
-        // Ambil semua laporan praktikum dengan relasi ke mata kuliah
-        $laporanPraktikum = LaporanPraktikum::with('mataKuliahPraktikum')->get();
+        // Cek peran pengguna: asisten_dosen, laboran, atau kepala_lab
+        if ($user->role === 'asisten_dosen') {
+            // Ambil mata kuliah yang hanya terkait dengan asisten dosen yang login
+            $mataKuliahPraktikum = $user->asistenPraktikum->mataKuliahPraktikum ?? collect(); // Pastikan hubungan sudah terdefinisi di model
+        } else {
+            // Laboran dan Kepala Lab dapat melihat semua mata kuliah
+            $mataKuliahPraktikum = MataKuliahPraktikum::all();
+        }
 
-        return view('laporan_praktikum.index', compact('mataKuliahPraktikum', 'laporanPraktikum'));
+        return view('laporan_praktikum.index', compact('mataKuliahPraktikum'));
     }
 
     /**

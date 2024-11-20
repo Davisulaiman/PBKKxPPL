@@ -94,7 +94,7 @@
                     <p>Kelas: {{ $mataKuliah->kelas }}</p>
                     <p>SKS: {{ $mataKuliah->sks }}</p>
                 </div>
-                <a href="{{ route('mahasiswa_praktikum.create') }}" class="btn btn-success">
+                <a href="{{ route('mahasiswa_praktikum.create', $mataKuliah->id) }}" class="btn btn-success">
                     <i class="fas fa-plus"></i>
                     Tambah Data
                 </a>

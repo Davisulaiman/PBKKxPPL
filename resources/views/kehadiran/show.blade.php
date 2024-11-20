@@ -45,7 +45,7 @@
 
                                     <!-- Laporan Absensi button visible only for Kepala Lab & Laboran -->
                                     @if (Auth::user()->role == 'kepala_lab' || Auth::user()->role == 'laboran')
-                                        <a href="{{ url('/laporan_absensi/' . $mataKuliah->id) }}"
+                                        <a href="{{ url('/laporan_absensi/' . $mataKuliah->id . '/' . $pertemuanField) }}"
                                             class="btn btn-info mt-3">
                                             Lihat Laporan Absensi
                                         </a>

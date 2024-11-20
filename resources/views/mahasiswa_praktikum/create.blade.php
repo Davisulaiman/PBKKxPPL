@@ -36,6 +36,8 @@
                     <form action="{{ route('mahasiswa_praktikum.store') }}" method="POST">
                         @csrf
 
+                        <input type="hidden" name="mata_kuliah_praktikum_id" value="{{ $mataKuliahPraktikum->id }}">
+
                         <div class="mb-3">
                             <label for="npm" class="form-label">NPM</label>
                             <input
@@ -43,6 +45,7 @@
                                 name="npm"
                                 class="form-control @error('npm') is-invalid @enderror"
                                 id="npm"
+                                max="10"
                                 value="{{ old('npm') }}"
                                 required
                             >

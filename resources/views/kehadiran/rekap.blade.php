@@ -8,6 +8,14 @@
             <li class="breadcrumb-item active">Rekap Absensi</li>
         </ol>
 
+        <!-- Tombol Print Rekap Absensi -->
+        <div class="mb-3">
+            <a href="{{ route('rekap.print', $mataKuliah->id) }}" target="_blank" class="btn btn-primary">
+                Print Rekap Absensi
+            </a>
+        </div>
+
+        <!-- Card Rekap Absensi -->
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>

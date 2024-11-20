@@ -25,9 +25,11 @@ class MahasiswaPraktikumController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(int $id)
     {
-        return view('mahasiswa_praktikum.create');
+        return view('mahasiswa_praktikum.create', [
+            'mataKuliahPraktikum' => MataKuliahPraktikum::findOrFail($id),
+        ]);
     }
 
     /**
@@ -38,13 +40,16 @@ class MahasiswaPraktikumController extends Controller
         // Validate the input data
         $request->validate([
             'npm' => 'required|unique:mahasiswa_praktikums,npm',
-            'nama' => 'required|string|max:255'
+            'nama' => 'required|string|max:255',
+            'mata_kuliah_praktikum_id' => 'required|exists:mata_kuliah_praktikums,id',
         ]);
 
         // Create a new Mahasiswa record
-        MahasiswaPraktikum::create($request->only('npm', 'nama'));
+        $mahasiswa = MahasiswaPraktikum::create($request->only('npm', 'nama'));
 
-        return redirect()->back()->with('success', 'Mahasiswa berhasil ditambahkan');
+        $mahasiswa->mataKuliahPraktikum()->syncWithoutDetaching([$request->mata_kuliah_praktikum_id]);
+
+        return redirect()->route('mahasiswa_praktikum.index')->with('success', 'Mahasiswa Praktikum berhasil ditambahkan.');
     }
 
     /**
@@ -88,7 +93,7 @@ class MahasiswaPraktikumController extends Controller
         // Update Mahasiswa data
         $mahasiswa->update($request->only('npm', 'nama'));
 
-        return redirect()->back()->with('success', 'Mahasiswa berhasil diperbarui');
+        return redirect()->route('mahasiswa_praktikum.index')->with('success', 'Mahasiswa Praktikum berhasil diperbarui.');
     }
 
     /**
@@ -99,19 +104,19 @@ class MahasiswaPraktikumController extends Controller
         $mahasiswa = MahasiswaPraktikum::findOrFail($id);
         $mahasiswa->delete();
 
-        return redirect()->back()->with('success', 'Mahasiswa berhasil dihapus');
+        return redirect()->route('mahasiswa_praktikum.index')->with('success', 'Mahasiswa Praktikum berhasil dihapus.');
     }
     public function import(Request $request, $mataKuliahId)
     {
         // Validate the file input
         $request->validate([
-            'file' => 'required|mimes:xlsx,csv'
+            'file' => 'required|mimes:xlsx,xls',
         ]);
 
         // Import the Excel file with Mahasiswa data and Mata Kuliah ID
         Excel::import(new MahasiswaPraktikumImport($mataKuliahId), $request->file('file'));
 
-        return redirect()->back()->with('success', 'Mahasiswa Praktikum data has been imported successfully.');
+        return redirect()->route('mahasiswa_praktikum.index')->with('success', 'Data mahasiswa berhasil diimport.');
     }
 
     public function deleteAll($mataKuliahId)
@@ -127,6 +132,6 @@ class MahasiswaPraktikumController extends Controller
         // Optionally, detach all just to ensure the pivot table is cleaned up
         $mataKuliah->mahasiswaPraktikum()->detach();
 
-        return redirect()->back()->with('success', 'Semua data mahasiswa telah dihapus.');
+        return redirect()->route('mahasiswa_praktikum.index')->with('success', 'Semua data mahasiswa dihapus.');
     }
 }

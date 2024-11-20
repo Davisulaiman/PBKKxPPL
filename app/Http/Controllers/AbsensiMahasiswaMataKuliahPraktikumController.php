@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\MahasiswaMataKuliahPraktikum;
 use Illuminate\Http\Request;
 use App\Models\AbsensiMahasiswaMataKuliahPraktikum;
@@ -20,13 +21,13 @@ class AbsensiMahasiswaMataKuliahPraktikumController extends Controller
         return view('attendance.index', compact('attendance', 'mahasiswaMataKuliahId'));
     }
 
-public function printMahasiswa($mahasiswaMataKuliahId)
-{
-            // Fetch attendance record or create a new one if it doesn't exist
-            $attendance = AbsensiMahasiswaMataKuliahPraktikum::firstOrNew(['mahasiswa_mata_kuliah_praktikum_id' => $mahasiswaMataKuliahId]);
+    public function printMahasiswa($mahasiswaMataKuliahId)
+    {
+        // Fetch attendance record or create a new one if it doesn't exist
+        $attendance = AbsensiMahasiswaMataKuliahPraktikum::firstOrNew(['mahasiswa_mata_kuliah_praktikum_id' => $mahasiswaMataKuliahId]);
 
-            return view('attendance.print', compact('attendance', 'mahasiswaMataKuliahId'));
-}
+        return view('attendance.print', compact('attendance', 'mahasiswaMataKuliahId'));
+    }
 
     public function update(Request $request, $mahasiswaMataKuliahId)
     {
@@ -127,7 +128,7 @@ public function printMahasiswa($mahasiswaMataKuliahId)
         $mahasiswaList = $mataKuliah->mahasiswaPraktikum;
 
         // Pluck the mahasiswa data along with their attendance status for the given pertemuan
-        $mahasiswaStatusAbsensi = $mahasiswaList->map(function($mahasiswa) use ($mataKuliahId, $pertemuan) {
+        $mahasiswaStatusAbsensi = $mahasiswaList->map(function ($mahasiswa) use ($mataKuliahId, $pertemuan) {
 
             // Find the related MahasiswaMataKuliahPraktikum record for this mahasiswa and mataKuliah
             $mahasiswaMataKuliahPraktikum = MahasiswaMataKuliahPraktikum::where('mahasiswa_praktikum_id', $mahasiswa->id)
@@ -164,7 +165,7 @@ public function printMahasiswa($mahasiswaMataKuliahId)
         $mahasiswaList = $mataKuliah->mahasiswaPraktikum;
 
         // Pluck the mahasiswa data along with their attendance status for the given pertemuan
-        $mahasiswaStatusAbsensi = $mahasiswaList->map(function($mahasiswa) use ($mataKuliahId, $pertemuan) {
+        $mahasiswaStatusAbsensi = $mahasiswaList->map(function ($mahasiswa) use ($mataKuliahId, $pertemuan) {
 
             // Find the related MahasiswaMataKuliahPraktikum record for this mahasiswa and mataKuliah
             $mahasiswaMataKuliahPraktikum = MahasiswaMataKuliahPraktikum::where('mahasiswa_praktikum_id', $mahasiswa->id)
@@ -239,14 +240,43 @@ public function printMahasiswa($mahasiswaMataKuliahId)
     }
 
     // View Laporan Absensi for Laboran and Kepala Lab
-    public function showLaporanAbsensi($mataKuliahId)
+    public function showLaporanAbsensi($mataKuliahId, $pertemuan)
     {
-        // Fetch the MataKuliahPraktikum by ID
         $mataKuliah = MataKuliahPraktikum::findOrFail($mataKuliahId);
-        $mahasiswaStatusAbsensi = $mataKuliah->mahasiswaPraktikum;
 
-        // Send data to view
-        return view('laporan_absensi.index', compact('mataKuliah', 'mahasiswaStatusAbsensi'));
+        // Ambil data mahasiswa dan status presensi berdasarkan pertemuan
+        $mahasiswaStatusAbsensi = $mataKuliah->mahasiswaPraktikum->map(function ($mahasiswa) use ($pertemuan) {
+            $absensi = $mahasiswa->absensi()
+                ->where('mahasiswa_mata_kuliah_praktikum_id', $mahasiswa->pivot->id)
+                ->first();
+
+            // Ambil status absensi berdasarkan pertemuan
+            $status = isset($absensi->{$pertemuan}) ? $absensi->{$pertemuan} : '-';
+
+            return [
+                'mahasiswa' => $mahasiswa,
+                'statusMahasiswa' => $this->convertStatusToSymbol($status), // Konversi status jadi simbol
+            ];
+        });
+
+        return view('kehadiran.laporan', compact('mataKuliah', 'mahasiswaStatusAbsensi', 'pertemuan'));
+    }
+
+    // Metode tambahan untuk mengonversi status ke simbol
+    protected function convertStatusToSymbol($status)
+    {
+        switch (strtolower($status)) {
+            case 'hadir':
+                return '✓';
+            case 'sakit':
+                return 'S';
+            case 'izin':
+                return 'I';
+            case 'alpa':
+                return 'A';
+            default:
+                return '-';
+        }
     }
 
     // View Rekap Laporan Absensi for All Roles
@@ -275,6 +305,50 @@ public function printMahasiswa($mahasiswaMataKuliahId)
 
         return view('kehadiran.rekap', compact('mataKuliah', 'mahasiswaStatusAbsensi'));
     }
+
+    public function printRekapLaporanAbsensi($mataKuliahId)
+    {
+        $mataKuliah = MataKuliahPraktikum::findOrFail($mataKuliahId);
+
+        $mahasiswaStatusAbsensi = $mataKuliah->mahasiswaPraktikum->map(function ($mahasiswa) {
+            $absensi = $mahasiswa->absensi->first();
+
+            $rekap = [];
+            for ($i = 1; $i <= 16; $i++) {
+                $status = $absensi ? $absensi["pertemuan_$i"] : AbsensiMahasiswaMataKuliahPraktikum::STATUS_TIDAK_ADA_KETERANGAN;
+
+                // Map status to symbols
+                switch ($status) {
+                    case AbsensiMahasiswaMataKuliahPraktikum::STATUS_HADIR:
+                        $rekap[$i] = '✓';
+                        break;
+                    case AbsensiMahasiswaMataKuliahPraktikum::STATUS_SAKIT:
+                        $rekap[$i] = 'S';
+                        break;
+                    case AbsensiMahasiswaMataKuliahPraktikum::STATUS_IZIN:
+                        $rekap[$i] = 'I';
+                        break;
+                    case AbsensiMahasiswaMataKuliahPraktikum::STATUS_ALPA:
+                        $rekap[$i] = 'A';
+                        break;
+                    default:
+                        $rekap[$i] = '-';
+                }
+            }
+
+            return [
+                'id' => $mahasiswa->id,
+                'npm' => $mahasiswa->npm,
+                'nama' => $mahasiswa->nama,
+                'rekap' => $rekap,
+            ];
+        });
+
+        $pdf = PDF::loadView('kehadiran.rekap_pdf', compact('mataKuliah', 'mahasiswaStatusAbsensi'));
+
+        return $pdf->setPaper('a4', 'landscape')->stream('rekap_laporan_absensi.pdf');
+    }
+
 
 
 

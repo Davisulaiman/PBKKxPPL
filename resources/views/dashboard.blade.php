@@ -41,7 +41,7 @@
                             <p class="card-text">Kelola laporan presensi praktikum</p>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="text-white text-decoration-none" href="{{ url('/laporan_presensi') }}">Lihat Detail</a>
+                            <a class="text-white text-decoration-none" href="{{ url('/absensi_praktikum') }}">Lihat Detail</a>
                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
@@ -162,7 +162,7 @@
                             <p class="card-text">Kelola laporan presensi praktikum</p>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="text-white text-decoration-none" href="{{ url('/laporan_absensi') }}">Lihat Detail</a>
+                            <a class="text-white text-decoration-none" href="{{ url('/absensi_praktikum') }}">Lihat Detail</a>
                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                         </div>
                     </div>

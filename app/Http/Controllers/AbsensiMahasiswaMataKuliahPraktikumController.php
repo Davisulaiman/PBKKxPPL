@@ -91,8 +91,17 @@ public function printMahasiswa($mahasiswaMataKuliahId)
     public function index()
     {
         $user = auth()->user();
-        $asisten = $user->asistenPraktikum;
-        $mataKuliahPraktikum = $asisten ? $asisten->mataKuliahPraktikum : collect(); // Mengambil data atau koleksi kosong jika tidak ada
+
+        // Cek peran pengguna: asisten_dosen, laboran, atau kepala_lab
+        if ($user->role === 'asisten_dosen') {
+            // Ambil mata kuliah yang hanya terkait dengan asisten dosen yang login
+            $asisten = $user->asistenPraktikum;
+            $mataKuliahPraktikum = $asisten ? $asisten->mataKuliahPraktikum : collect(); // Mengambil data atau koleksi kosong jika tidak ada
+        } else {
+            // Laboran dan Kepala Lab dapat melihat semua mata kuliah
+            $mataKuliahPraktikum = MataKuliahPraktikum::all();
+        }
+
         return view('kehadiran.index', compact('mataKuliahPraktikum'));
     }
 
@@ -223,19 +232,50 @@ public function printMahasiswa($mahasiswaMataKuliahId)
 
     public function __construct()
     {
-        // Middleware untuk memastikan hanya Kepala Laboran dan Laboran yang bisa mengakses laporan presensi
-        $this->middleware('role:kepala_lab,laboran')->only('showLaporanPresensi');
+        // Middleware to ensure only Kepala Laboran and Laboran can access attendance reports
+        $this->middleware('role:kepala_lab,laboran')->only('showLaporanAbsensi');
+        // Middleware to allow access to all roles for rekap laporan
+        $this->middleware('role:admin,asisten_dosen,laboran,kepala_lab')->only('showRekapLaporanAbsensi');
     }
 
-    public function showLaporanPresensi($mataKuliahId)
+    // View Laporan Absensi for Laboran and Kepala Lab
+    public function showLaporanAbsensi($mataKuliahId)
     {
-        // Ambil data dari model terkait
+        // Fetch the MataKuliahPraktikum by ID
         $mataKuliah = MataKuliahPraktikum::findOrFail($mataKuliahId);
         $mahasiswaStatusAbsensi = $mataKuliah->mahasiswaPraktikum;
 
-        // Kirim data ke view di folder laporan_absensi
+        // Send data to view
         return view('laporan_absensi.index', compact('mataKuliah', 'mahasiswaStatusAbsensi'));
     }
+
+    // View Rekap Laporan Absensi for All Roles
+    public function showRekapLaporanAbsensi($mataKuliahId)
+    {
+        // Fetch MataKuliahPraktikum by ID
+        $mataKuliah = MataKuliahPraktikum::findOrFail($mataKuliahId);
+
+        // Fetch all students associated with this MataKuliahPraktikum
+        $mahasiswaStatusAbsensi = $mataKuliah->mahasiswaPraktikum->map(function ($mahasiswa) {
+            // Fetch the absensi record for this mahasiswa
+            $absensi = $mahasiswa->absensi->first(); // Assuming one record per mahasiswa per MataKuliahPraktikum
+
+            $rekap = [];
+            for ($i = 1; $i <= 16; $i++) {
+                $rekap[$i] = $absensi ? $absensi["pertemuan_$i"] : AbsensiMahasiswaMataKuliahPraktikum::STATUS_TIDAK_ADA_KETERANGAN;
+            }
+
+            return [
+                'id' => $mahasiswa->id,
+                'npm' => $mahasiswa->npm,
+                'nama' => $mahasiswa->nama,
+                'rekap' => $rekap,
+            ];
+        });
+
+        return view('kehadiran.rekap', compact('mataKuliah', 'mahasiswaStatusAbsensi'));
+    }
+
 
 
     /**

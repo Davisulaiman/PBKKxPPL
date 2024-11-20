@@ -54,15 +54,15 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
     });
 
     // Resources routes for kepala_lab & laboran role
-    Route::middleware(['role:kepala_lab,laboran'])->group(function () {
-        Route::get('/absensi_praktikum/{mataKuliahId}/laporan', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'showLaporanPresensi'])->name('laporan.absensi');
-    });
+    Route::middleware(['role:kepala_lab,laboran,asisten_dosen'])->group(function () {
+        Route::get('/absensi_praktikum', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'index'])->name('absensi_praktikum.index');
+        Route::get('/absensi_praktikum/{id}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'show'])->name('absensi_praktikum.show');
+        Route::get('/rekap_laporan_absensi/{mataKuliahId}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'showRekapLaporanAbsensi'])->name('rekap_laporan_absensi.show');
+});
 
     // Attendance routes for asisten dosen
     Route::middleware('role:asisten_dosen')->group(function () {
         // Route to display attendance form
-        Route::get('/absensi_praktikum', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'index'])->name('absensi_praktikum.index');
-        Route::get('/absensi_praktikum/{id}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'show'])->name('absensi_praktikum.show');
         Route::get('/absensi_praktikum/{mataKuliahId}/{pertemuan}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'showAbsensiPertemuan'])->name('absensi.showPertemuan');
         Route::get('/absensi_praktikum/{mataKuliahId}/{pertemuan}/print', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'showPrint'])->name('absensi.showPrint');
         Route::post('/update_absensi/{mataKuliahId}/{pertemuan}', [AbsensiMahasiswaMataKuliahPraktikumController::class, 'updateAbsensiPertemuan'])->name('absensi.updatePertemuan');

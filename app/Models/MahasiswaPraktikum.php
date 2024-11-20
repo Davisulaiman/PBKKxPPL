@@ -21,7 +21,6 @@ public function mataKuliahPraktikum()
         ->withPivot('id'); // Pivot table relationship, without a separate model
 }
 
-
     /**
      * Define the relationship with AbsensiMahasiswaMataKuliahPraktikum.
      */

@@ -14,6 +14,7 @@ class LaboranController extends Controller
         $this->middleware('role:kepala_lab'); // Middleware for access control
     }
 
+
     public function index()
     {
         $laborans = Laboran::all();
@@ -70,7 +71,7 @@ class LaboranController extends Controller
             'username' => 'required|unique:users,name',
             'email' => 'required|unique:users,email',
         ]);
-        
+
         // Temukan Laboran berdasarkan ID
         $laboran = Laboran::findOrFail($id);
         $user = $laboran->user;

@@ -11,7 +11,7 @@
         <!-- Tombol Print Rekap Absensi -->
         <div class="mb-3">
             <a href="{{ route('rekap.print', $mataKuliah->id) }}" target="_blank" class="btn btn-primary">
-                <i class="fas fa-file-pdf"></i> Eksport Rekap Absensi
+                <i class="fas fa-file-pdf"></i> Export Rekap Absensi
             </a>
         </div>
 

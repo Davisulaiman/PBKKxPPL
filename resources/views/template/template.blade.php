@@ -46,12 +46,16 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li>
+                        <a class="dropdown-item" href="{{ url('/profile') }}">{{ __('Profile') }}</a>
+                    </li>
+                    <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item">{{ __('Log Out') }}</button>
                         </form>
                     </li>
                 </ul>
+
             </li>
         </ul>
     </nav>

@@ -7,16 +7,16 @@
     <title>{{ $appname ?? 'Manajemen Praktikum' }}</title>
 
     <!-- Favicon -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="apple-touch-icon">
+    <link rel="icon" href="{{ asset('assets/img/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/img/favicon.png') }}">
 
     <!-- Core CSS -->
-    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Additional Styles -->
     @stack('styles')
@@ -24,41 +24,73 @@
 </head>
 
 <body class="sb-nav-fixed">
-    <!-- Top Navigation Bar -->
+    <!-- Top Navigation -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Brand -->
-        <a class="navbar-brand ps-3" href="{{ url('/dashboard') }}">Manajemen Praktikum</a>
+        <a class="navbar-brand ps-3" href="{{ url('/dashboard') }}">
+            Manajemen Praktikum
+        </a>
 
         <!-- Sidebar Toggle -->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button>
 
-        <!-- Search Form -->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
+        <!-- Top Navigation Right Side -->
+        <div class="d-flex ms-auto">
+            <!-- Search Form -->
+            <form class="d-none d-md-inline-block form-inline me-0 me-md-3 my-2 my-md-0"></form>
 
-        <!-- User Navigation -->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-user fa-fw"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li>
-                        <a class="dropdown-item" href="{{ url('/profile') }}">{{ __('Profile') }}</a>
-                    </li>
-                    <li>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="dropdown-item">{{ __('Log Out') }}</button>
-                        </form>
-                    </li>
-                </ul>
-
-            </li>
-        </ul>
+            <!-- User Navigation -->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ url('/profile') }}">
+                                {{ __('Profile') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                               data-bs-target="#logoutModal">
+                                {{ __('Log Out') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </nav>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah kamu yakin ingin logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Layout -->
     <div id="layoutSidenav">
@@ -72,26 +104,35 @@
 
                         <!-- Dashboard Link -->
                         <a class="nav-link" href="{{ url('/dashboard') }}">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
                             Dashboard
                         </a>
 
-                        <!-- Kepala Lab Menu -->
+                        <!-- Role-Based Navigation -->
                         @if (Auth::user()->role == 'kepala_lab')
+                            <!-- Kepala Lab Menu -->
                             <a class="nav-link" href="{{ url('/laboran') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-users-cog me-2"></i></div>
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-users-cog me-2"></i>
+                                </div>
                                 Kelola Laboran
                             </a>
                         @endif
 
-                        <!-- Laboran Menu -->
                         @if (Auth::user()->role == 'laboran')
+                            <!-- Laboran Menu -->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                                data-bs-target="#collapseLayouts" aria-expanded="false"
                                aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
                                 Praktikum
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                <div class="sb-sidenav-collapse-arrow">
+                                    <i class="fas fa-angle-down"></i>
+                                </div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
                                  data-bs-parent="#sidenavAccordion">
@@ -109,14 +150,18 @@
                             </div>
                         @endif
 
-                        <!-- Shared Menu for Laboran and Kepala Lab -->
                         @if (Auth::user()->role == 'laboran' || Auth::user()->role == 'kepala_lab')
+                            <!-- Shared Menu for Laboran and Kepala Lab -->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                                data-bs-target="#collapseLaporan" aria-expanded="false"
                                aria-controls="collapseLaporan">
-                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
                                 Laporan
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                <div class="sb-sidenav-collapse-arrow">
+                                    <i class="fas fa-angle-down"></i>
+                                </div>
                             </a>
                             <div class="collapse" id="collapseLaporan" aria-labelledby="headingTwo"
                                  data-bs-parent="#sidenavAccordion">
@@ -130,23 +175,31 @@
                                 </nav>
                             </div>
                             <a class="nav-link" href="{{ url('/penilaian_praktikum') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
                                 Penilaian Praktikum
                             </a>
                         @endif
 
-                        <!-- Asisten Dosen Menu -->
                         @if (Auth::user()->role == 'asisten_dosen')
+                            <!-- Asisten Dosen Menu -->
                             <a class="nav-link" href="{{ url('/absensi_praktikum') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
                                 Absensi Praktikum
                             </a>
                             <a class="nav-link" href="{{ url('/laporan_praktikum') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
                                 Laporan Praktikum
                             </a>
                             <a class="nav-link" href="{{ url('/penilaian_praktikum') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
                                 Penilaian Praktikum
                             </a>
                         @endif
@@ -165,7 +218,9 @@
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Sistem Informasi UNIB 2024</div>
+                        <div class="text-muted">
+                            Copyright &copy; Sistem Informasi UNIB 2024
+                        </div>
                     </div>
                 </div>
             </footer>

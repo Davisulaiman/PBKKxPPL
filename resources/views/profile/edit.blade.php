@@ -88,53 +88,61 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <form method="post" action="{{ route('password.update') }}" id="passwordUpdateForm">
-                @csrf
-                @method('put')
+<form method="post" action="{{ route('password.update') }}" id="passwordUpdateForm">
+    @csrf
+    @method('put')
 
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th class="bg-light w-25">{{ __('Kata Sandi Saat Ini') }}</th>
-                            <td>
-                                <input type="password"
-                                       name="current_password"
-                                       class="form-control @error('current_password') is-invalid @enderror"
-                                       required>
-                                @error('current_password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="bg-light">{{ __('Kata Sandi Baru') }}</th>
-                            <td>
-                                <input type="password"
-                                       name="password"
-                                       class="form-control @error('password') is-invalid @enderror"
-                                       required>
-                                @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="bg-light">{{ __('Konfirmasi Kata Sandi') }}</th>
-                            <td>
-                                <input type="password"
-                                       name="password_confirmation"
-                                       class="form-control"
-                                       required>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePasswordModal">
-                        {{ __('Perbarui Kata Sandi') }}
-                    </button>
-                </div>
-            </form>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <!-- Current Password -->
+            <tr>
+                <th class="bg-light w-25" for="current_password">{{ __('Kata Sandi Saat Ini') }}</th>
+                <td>
+                    <input type="password"
+                           id="current_password"
+                           name="current_password"
+                           class="form-control password-input @error('current_password') is-invalid @enderror"
+                           required>
+                    @error('current_password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </td>
+            </tr>
+            <!-- New Password -->
+            <tr>
+                <th class="bg-light" for="password">{{ __('Kata Sandi Baru') }}</th>
+                <td>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           class="form-control password-input @error('password') is-invalid @enderror"
+                           required>
+                    @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </td>
+            </tr>
+            <!-- Confirm Password -->
+            <tr>
+                <th class="bg-light" for="password_confirmation">{{ __('Konfirmasi Kata Sandi') }}</th>
+                <td>
+                    <input type="password"
+                           id="password_confirmation"
+                           name="password_confirmation"
+                           class="form-control password-input"
+                           required>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="mt-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePasswordModal">
+            {{ __('Perbarui Kata Sandi') }}
+        </button>
+    </div>
+</form>
+
         </div>
     </div>
 
@@ -216,3 +224,44 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/check-password-strength/dist/umd.js"></script>
+<script>
+    $(document).ready(function() {
+        // Add password strength feedback element
+        const strengthMeter = $('<span>', { id: 'password-strength-feedback', class: 'mt-1 text-sm' });
+
+        // Append the strength meter below the new password input
+        $('#password').after(strengthMeter);
+
+        // On password input, check strength and update feedback
+        $('#password').on('input', function() {
+            const password = $(this).val();
+            const passwordStrength = checkPasswordStrength.passwordStrength(password).value;
+
+            // Update the feedback span with the strength level
+            $('#password-strength-feedback').text(passwordStrength);
+
+            // Remove previous classes and apply new one based on strength
+            $('#password-strength-feedback').removeClass('text-gray-500 text-red-500 text-yellow-500 text-green-500');
+
+            switch (passwordStrength) {
+                case 'Weak':
+                    $('#password-strength-feedback').addClass('text-red-500');
+                    break;
+                case 'Fair':
+                    $('#password-strength-feedback').addClass('text-yellow-500');
+                    break;
+                case 'Strong':
+                    $('#password-strength-feedback').addClass('text-green-500');
+                    break;
+                default:
+                    $('#password-strength-feedback').addClass('text-gray-500');
+            }
+        });
+    });
+</script>
+@endpush
+

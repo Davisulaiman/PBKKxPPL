@@ -350,8 +350,6 @@ class AbsensiMahasiswaMataKuliahPraktikumController extends Controller
     }
 
 
-
-
     /**
      * Remove the specified attendance record from storage.
      */

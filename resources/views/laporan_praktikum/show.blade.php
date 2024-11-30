@@ -20,6 +20,12 @@
                 Laporan Pertemuan 1-16
             </div>
             <div class="card-body">
+                <a href="{{ url('/rekap_laporan_praktikum/' . $mataKuliah->id) }}" class="btn btn-secondary mb-3">
+                    <i class="fas fa-file-alt me-1"></i>
+                    Rekap Laporan Praktikum
+                </a>
+
+
                 <div class="table-responsive">
                     <table id="laporanTable" class="table table-striped table-bordered table-hover">
                         <thead class="table-dark">
@@ -63,4 +69,3 @@
         </div>
     </div>
 @endsection
-

@@ -89,16 +89,12 @@ Route::middleware(['role:kepala_lab,laboran,asisten_dosen'])->group(function () 
     Route::middleware(['auth', 'role:asisten_dosen'])->group(function () {
         // Route to display the form to create Penilaian Praktikum
         Route::get('penilaian_praktikum/create', [PenilaianPraktikumController::class, 'create'])->name('penilaian_praktikum.create');
-
         // Route to store Penilaian Praktikum
         Route::post('penilaian_praktikum', [PenilaianPraktikumController::class, 'store'])->name('penilaian_praktikum.store');
-
         // Route to download the template
         Route::get('/penilaian-praktikum/download-template', [PenilaianPraktikumController::class, 'downloadTemplate'])->name('penilaian_praktikum.download_template');
-
         // Route to display the form for editing Penilaian Praktikum
         Route::get('penilaian_praktikum/{id}/edit', [PenilaianPraktikumController::class, 'edit'])->name('penilaian_praktikum.edit');
-
         // Route to update Penilaian Praktikum
         Route::put('penilaian_praktikum/{id}', [PenilaianPraktikumController::class, 'update'])->name('penilaian_praktikum.update');
 
@@ -116,7 +112,9 @@ Route::middleware(['role:kepala_lab,laboran,asisten_dosen'])->group(function () 
         Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['index', 'show']);
         Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}', [LaporanPraktikumController::class, 'print'])
         ->name('laporan_praktikum.print');
-
+        Route::get('/rekap_laporan_praktikum/{mata_kuliah_id}', [LaporanPraktikumController::class, 'rekap'])
+        ->name('laporan_praktikum.rekap');
+        Route::get('/laporan-praktikum/rekap-pdf/{mata_kuliah_id}', [LaporanPraktikumController::class, 'rekapPdf'])->name('rekap.pdf');
     });
 
     // Route untuk Asisten Dosen (create)

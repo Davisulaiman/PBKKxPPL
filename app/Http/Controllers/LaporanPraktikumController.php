@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\LaporanPraktikum;
 use App\Models\MataKuliahPraktikum;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\User;
 
 class LaporanPraktikumController extends Controller
 {
@@ -138,5 +140,49 @@ class LaporanPraktikumController extends Controller
             'pertemuan' => $pertemuan,
             'laporan' => LaporanPraktikum::where('mata_kuliah_praktikum_id', $mata_kuliah_id)->where('pertemuan', $pertemuan)->first()
         ]);
+    }
+
+    public function rekap(int $mata_kuliah_id)
+    {
+        // Ambil semua laporan praktikum dari pertemuan 1-16 untuk mata kuliah terkait
+        $laporan = LaporanPraktikum::where('mata_kuliah_praktikum_id', $mata_kuliah_id)
+            ->whereBetween('pertemuan', [1, 16])
+            ->orderBy('pertemuan')
+            ->get();
+
+        $mataKuliah = MataKuliahPraktikum::findOrFail($mata_kuliah_id);
+
+        return view('laporan_praktikum.rekap', compact('laporan', 'mataKuliah'));
+    }
+
+    public function rekapPdf(int $mata_kuliah_id)
+    {
+        // Ambil data mata kuliah dan laporan
+        $mataKuliah = MataKuliahPraktikum::findOrFail($mata_kuliah_id);
+        $laporan = LaporanPraktikum::where('mata_kuliah_praktikum_id', $mata_kuliah_id)
+            ->orderBy('pertemuan')
+            ->get();
+
+        // Dapatkan asisten untuk mata kuliah ini melalui tabel pivot
+        $asistenPraktikum = $mataKuliah->asistenPraktikum;
+
+        // Ambil dua asisten pertama
+        $asistenDosen1 = $asistenPraktikum->first();
+        $asistenDosen2 = $asistenPraktikum->skip(1)->first();
+
+        // Ambil user untuk setiap asisten dengan fallback
+        $userAsistenDosen1 = $asistenDosen1 ? $asistenDosen1->user : null;
+        $userAsistenDosen2 = $asistenDosen2 ? $asistenDosen2->user : null;
+
+        // Siapkan data untuk PDF dengan fallback
+        $pdf = Pdf::loadView('laporan_praktikum.rekap_pdf', [
+            'laporan' => $laporan,
+            'mataKuliah' => $mataKuliah,
+            'asistenDosen1' => $userAsistenDosen1 ?? new User(), // Fallback ke objek kosong
+            'asistenDosen2' => $userAsistenDosen2 ?? new User() // Fallback ke objek kosong
+        ])->setPaper('a4', 'portrait');
+
+        // Return file PDF untuk diunduh
+        return $pdf->download('rekap_laporan_praktikum_' . $mataKuliah->kode_mata_kuliah . '.pdf');
     }
 }

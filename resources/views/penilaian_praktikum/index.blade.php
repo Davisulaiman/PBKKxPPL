@@ -22,6 +22,15 @@
                     </div>
                 @endif
 
+                @if(auth()->user()->role === 'asisten_dosen')
+    <a href="{{ route('penilaian_praktikum.template') }}" class="btn btn-primary">Download Template Penilaian Praktikum</a>
+@endif
+
+@if(in_array(auth()->user()->role, ['laboran', 'kepala_lab']))
+    <a href="{{ route('penilaian_praktikum.editTemplate') }}" class="btn btn-success">Kelola Template Penilaian</a>
+@endif
+
+
                 <!-- Tombol Export PDF (Hanya untuk Laboran dan Kepala Lab) -->
                 @if (in_array(Auth::user()->role, ['laboran', 'kepala_lab']))
                     <a href="{{ route('penilaian_praktikum.export_pdf') }}" class="btn btn-info mb-3">

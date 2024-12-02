@@ -89,7 +89,7 @@
                                             @if (in_array($mataKuliah->id, old('mata_kuliah_praktikum_id', []))) checked @endif
                                         >
                                         <label class="form-check-label" for="mataKuliah{{ $mataKuliah->id }}">
-                                            {{ $mataKuliah->nama_mata_kuliah }} ({{ $mataKuliah->kode_mata_kuliah }})
+                                             ({{ $mataKuliah->kode_mata_kuliah }}) {{ $mataKuliah->nama_mata_kuliah }} ({{ $mataKuliah->kelas }})
                                         </label>
                                     </div>
                                 @endforeach

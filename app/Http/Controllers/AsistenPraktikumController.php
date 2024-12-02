@@ -12,15 +12,23 @@ class AsistenPraktikumController extends Controller
 {
     public function index()
     {
-        // Retrieve all Asisten Praktikum data with Mata Kuliah Praktikum relationships
-        $asistenPraktikum = AsistenPraktikum::with('mataKuliahPraktikum')->get();
+        // Retrieve all Asisten Praktikum data with Mata Kuliah Praktikum relationships, ordered
+        $asistenPraktikum = AsistenPraktikum::with(['mataKuliahPraktikum' => function ($query) {
+            $query->orderBy('kelas')->orderBy('kode_mata_kuliah');
+        }])->get();
+
         return view('asisten_praktikum.index', compact('asistenPraktikum'));
     }
 
+
     public function create()
     {
-        // Retrieve active Mata Kuliah Praktikum data
-        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)->get();
+        // Retrieve active Mata Kuliah Praktikum data and order by 'kelas' and 'kode_mata_kuliah'
+        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)
+            ->orderBy('kelas')
+            ->orderBy('kode_mata_kuliah')
+            ->get();
+
         return view('asisten_praktikum.create', compact('mataKuliahPraktikum'));
     }
 
@@ -57,14 +65,20 @@ class AsistenPraktikumController extends Controller
         return redirect()->route('asisten_praktikum.index')->with('success', 'Asisten Praktikum berhasil ditambahkan.');
     }
 
-    public function edit($id)
-    {
-        $asisten = AsistenPraktikum::findOrFail($id);
-        $mataKuliahPraktikum = MataKuliahPraktikum::all();
-        $selectedMataKuliah = $asisten->mataKuliahPraktikum->pluck('id')->toArray();
+public function edit($id)
+{
+    $asisten = AsistenPraktikum::findOrFail($id);
 
-        return view('asisten_praktikum.edit', compact('asisten', 'mataKuliahPraktikum', 'selectedMataKuliah'));
-    }
+    // Retrieve Mata Kuliah Praktikum data and order by 'kelas' and 'kode_mata_kuliah'
+    $mataKuliahPraktikum = MataKuliahPraktikum::orderBy('kelas')
+        ->orderBy('kode_mata_kuliah')
+        ->get();
+
+    $selectedMataKuliah = $asisten->mataKuliahPraktikum->pluck('id')->toArray();
+
+    return view('asisten_praktikum.edit', compact('asisten', 'mataKuliahPraktikum', 'selectedMataKuliah'));
+}
+
 
     public function update(Request $request, $id)
     {

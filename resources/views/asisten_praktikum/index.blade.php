@@ -29,7 +29,7 @@
                 <th>Nama Praktikan</th>
                 <th>Username</th>
                 <th>Email</th>
-                <th>Mata Kuliah</th>
+                <th>Nama Mata Kuliah & Kelas</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -44,7 +44,7 @@
                 <td>
                     @if($asisten->mataKuliahPraktikum->isNotEmpty())
                         @foreach($asisten->mataKuliahPraktikum as $mataKuliah)
-                            {{ $mataKuliah->nama_mata_kuliah }} <br>
+                            <strong>{{ $mataKuliah->nama_mata_kuliah }}</strong> - {{ $mataKuliah->kelas }} <br>
                         @endforeach
                     @else
                         -
@@ -83,7 +83,6 @@
                             </div>
                         </div>
                     </div>
-
                 </td>
             </tr>
             @empty

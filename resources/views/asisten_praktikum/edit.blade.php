@@ -61,7 +61,7 @@
                         <input type="checkbox" class="form-check-input" name="mata_kuliah_praktikum_id[]" value="{{ $mataKuliah->id }}" id="mataKuliah{{ $mataKuliah->id }}"
                         @if (in_array($mataKuliah->id, $selectedMataKuliah)) checked @endif>
                         <label class="form-check-label" for="mataKuliah{{ $mataKuliah->id }}">
-                            {{ $mataKuliah->nama_mata_kuliah }} ({{ $mataKuliah->kode_mata_kuliah }})
+                             ({{ $mataKuliah->kode_mata_kuliah }}) {{ $mataKuliah->nama_mata_kuliah }} ({{ $mataKuliah->kelas }})
                         </label>
                     </div>
                 @endforeach

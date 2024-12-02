@@ -94,7 +94,7 @@ class PraktikumTemplateController extends Controller
 
         // Jika tidak ada template yang tersedia
         if (!$template) {
-            return redirect()->back()->with('error', 'Tidak ada template yang tersedia.');
+            return redirect()->back()->with('error', 'Template tidak ditemukan. Hubungi laboran untuk menambahkan template.');
         }
 
         // Mengarahkan user ke link Google Drive template

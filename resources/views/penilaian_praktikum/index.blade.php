@@ -6,7 +6,15 @@
             <div class="col-12">
                 <h2 class="mb-4">Penilaian Praktikum</h2>
 
-                <!-- Tombol Tambah Penilaian Praktikum (Hanya untuk Asisten Dosen) -->
+                <!-- Alert Jika Tidak Ada Template -->
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error:</strong> {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                <!-- Tombol Tambah Penilaian Praktikum -->
                 @if (Auth::user()->role == 'asisten_dosen')
                     <a href="{{ route('penilaian_praktikum.create') }}" class="btn btn-success mb-3">
                         <i class="fas fa-plus"></i> Tambah Penilaian Praktikum
@@ -15,19 +23,10 @@
                     <div class="mb-3 p-3 bg-light border rounded shadow-sm">
                         <p class="mb-2"><strong>Unduh Template:</strong> Untuk kemudahan penginputan, Anda dapat mengunduh
                             template penilaian praktikum dengan mengklik tombol di bawah:</p>
-                        <a href="{{ route('penilaian_praktikum.template') }}" class="btn btn-primary">
+                        <a href="{{ route('praktikum_template.templateForAssistant') }}" class="btn btn-primary">
                             <i class="fas fa-download"></i> Unduh Template Penilaian Praktikum
                         </a>
                     </div>
-
-                    <!-- Section for Downloading Template with Styling -->
-                    {{-- <div class="mb-3 p-3 bg-light border rounded shadow-sm">
-                        <p class="mb-2"><strong>Unduh Template:</strong> Untuk kemudahan penginputan, Anda dapat mengunduh
-                            template penilaian praktikum dengan mengklik tombol di bawah:</p>
-                        <a href="{{ route('penilaian_praktikum.download_template') }}" class="btn btn-primary">
-                            <i class="fas fa-download"></i> Unduh Template Penilaian Praktikum
-                        </a>
-                    </div> --}}
                 @endif
 
 

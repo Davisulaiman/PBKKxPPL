@@ -97,10 +97,17 @@ class AbsensiMahasiswaMataKuliahPraktikumController extends Controller
         if ($user->role === 'asisten_dosen') {
             // Ambil mata kuliah yang hanya terkait dengan asisten dosen yang login
             $asisten = $user->asistenPraktikum;
-            $mataKuliahPraktikum = $asisten ? $asisten->mataKuliahPraktikum : collect(); // Mengambil data atau koleksi kosong jika tidak ada
+            $mataKuliahPraktikum = $asisten
+                ? $asisten->mataKuliahPraktikum()
+                    ->orderBy('kode_mata_kuliah', 'asc')
+                    ->orderBy('kelas', 'asc')
+                    ->get()
+                : collect(); // Mengambil data atau koleksi kosong jika tidak ada
         } else {
             // Laboran dan Kepala Lab dapat melihat semua mata kuliah
-            $mataKuliahPraktikum = MataKuliahPraktikum::all();
+            $mataKuliahPraktikum = MataKuliahPraktikum::orderBy('kode_mata_kuliah', 'asc')
+                ->orderBy('kelas', 'asc')
+                ->get();
         }
 
         return view('kehadiran.index', compact('mataKuliahPraktikum'));

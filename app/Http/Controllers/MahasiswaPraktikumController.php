@@ -15,9 +15,15 @@ class MahasiswaPraktikumController extends Controller
      */
     public function index()
     {
-        // Fetch all mata kuliah and mahasiswa records
-        $mataKuliahPraktikum = MataKuliahPraktikum::all();
-        $mahasiswas = MahasiswaPraktikum::all();
+        // Fetch all mata kuliah records with sorting
+        $mataKuliahPraktikum = MataKuliahPraktikum::orderBy('kode_mata_kuliah', 'asc')
+            ->orderBy('kelas', 'asc')
+            ->get();
+
+        // Fetch all mahasiswa records with sorting
+        $mahasiswas = MahasiswaPraktikum::orderBy('nama', 'asc')
+            ->orderBy('npm', 'asc')
+            ->get();
 
         return view('mahasiswa_praktikum.index', compact('mataKuliahPraktikum', 'mahasiswas'));
     }

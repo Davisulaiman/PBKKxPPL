@@ -4,7 +4,7 @@
     <div class="container-fluid px-4">
         <h1 class="mt-4">Laporan Praktikum</h1>
 
-        <!-- Tampilkan laporan praktikum terkait dengan asisten dosen yang login -->
+        <!-- Tampilkan laporan praktikum terkait -->
         <div class="row">
             @forelse($mataKuliahPraktikum as $mataKuliah)
                 <div class="col-xl-6 col-md-6 mb-4">

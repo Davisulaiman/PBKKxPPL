@@ -20,24 +20,14 @@
             padding: 8px;
             text-align: left;
         }
-        .signature-section {
+        .signature {
             margin-top: 50px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .signature-box {
             text-align: center;
-            width: 45%;
         }
-        .signature-line {
-            margin-top: 60px;
-            border-top: 1px solid black;
-            width: 200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .signature-section p {
-            margin: 5px 0;
+        .signature div {
+            display: inline-block;
+            width: 40%;
+            text-align: center;
         }
     </style>
 </head>
@@ -45,7 +35,6 @@
     <h1>Rekap Laporan Praktikum</h1>
     <p><strong>Mata Kuliah:</strong> {{ $mataKuliah->kode_mata_kuliah }} - {{ $mataKuliah->nama_mata_kuliah }}</p>
     <p><strong>Kelas:</strong> {{ $mataKuliah->kelas }}</p>
-
     <table class="table">
         <thead>
             <tr>
@@ -78,18 +67,19 @@
             @endforelse
         </tbody>
     </table>
-
     <!-- Tanda Tangan -->
-    <div class="signature-section">
-        <div class="signature-box">
-            <p>Mengetahui,</p>
-            <div class="signature-line"></div>
+    <div class="signature">
+        <div>
+            <p>Asisten Dosen 1</p>
+            <br><br><br>
+            <p>________________________</p>
             <p>{{ $asistenDosen1->name ?? $asistenDosen1->nama ?? 'Asisten 1 Tidak Tersedia' }}</p>
             <p>NPM: </p>
         </div>
-        <div class="signature-box">
-            <p>Mengetahui,</p>
-            <div class="signature-line"></div>
+        <div>
+            <p>Asisten Dosen 2</p>
+            <br><br><br>
+            <p>________________________</p>
             <p>{{ $asistenDosen2->name ?? $asistenDosen2->nama ?? 'Asisten 2 Tidak Tersedia' }}</p>
             <p>NPM: </p>
         </div>

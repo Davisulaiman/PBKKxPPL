@@ -87,6 +87,8 @@ class LaboranController extends Controller
         $request->validate([
             'nama' => 'required',
             'username' => 'required|unique:laborans,username,' . $id, // Mengizinkan username yang sama jika hanya untuk ID yang sama
+            'password' => 'nullable|min:8', // Validasi password (optional, minimal 8 karakter)
+     
         ]);
 
         // Mengambil data Laboran berdasarkan ID

@@ -28,7 +28,7 @@ class AsistenPraktikumController extends Controller
     {
         // Validate input
         $request->validate([
-            'npm' => 'required|unique:asisten_praktikums,npm',
+            'npm' => 'required|unique:asisten_praktikums,npm|max:15',
             'nama_praktikan' => 'required',
             'username' => 'required|unique:asisten_praktikums,username',
             'mata_kuliah_praktikum_id' => 'required|array',
@@ -80,6 +80,7 @@ class AsistenPraktikumController extends Controller
             'username' => 'required|unique:asisten_praktikums,username,' . $id,
             'mata_kuliah_praktikum_id' => 'required|array',
             'mata_kuliah_praktikum_id.*' => 'exists:mata_kuliah_praktikums,id', // Validasi ID mata kuliah
+            'password' => 'nullable|min:8', // Validasi password (optional, minimal 8 karakter)
         ]);
 
         // Mengambil data Asisten Praktikum berdasarkan ID
@@ -97,6 +98,7 @@ class AsistenPraktikumController extends Controller
         $user->name = $request->nama_praktikan;
         $user->email = "{$request->username}@gmail.com";
 
+        // Jika password diisi, perbarui password (validasi sudah dilakukan sebelumnya)
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password); // Update password jika diisi
         }

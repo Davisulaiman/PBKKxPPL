@@ -12,23 +12,15 @@ class AsistenPraktikumController extends Controller
 {
     public function index()
     {
-        // Retrieve all Asisten Praktikum data with Mata Kuliah Praktikum relationships, ordered
-        $asistenPraktikum = AsistenPraktikum::with(['mataKuliahPraktikum' => function ($query) {
-            $query->orderBy('kelas')->orderBy('kode_mata_kuliah');
-        }])->get();
-
+        // Retrieve all Asisten Praktikum data with Mata Kuliah Praktikum relationships
+        $asistenPraktikum = AsistenPraktikum::with('mataKuliahPraktikum')->get();
         return view('asisten_praktikum.index', compact('asistenPraktikum'));
     }
 
-
     public function create()
     {
-        // Retrieve active Mata Kuliah Praktikum data and order by 'kelas' and 'kode_mata_kuliah'
-        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)
-            ->orderBy('kelas')
-            ->orderBy('kode_mata_kuliah')
-            ->get();
-
+        // Retrieve active Mata Kuliah Praktikum data
+        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)->get();
         return view('asisten_praktikum.create', compact('mataKuliahPraktikum'));
     }
 
@@ -65,51 +57,52 @@ class AsistenPraktikumController extends Controller
         return redirect()->route('asisten_praktikum.index')->with('success', 'Asisten Praktikum berhasil ditambahkan.');
     }
 
-public function edit($id)
-{
-    $asisten = AsistenPraktikum::findOrFail($id);
+    public function edit($id)
+    {
+        // Mengambil data Asisten Praktikum berdasarkan ID
+        $asisten = AsistenPraktikum::with('user')->findOrFail($id);
 
-    // Retrieve Mata Kuliah Praktikum data and order by 'kelas' and 'kode_mata_kuliah'
-    $mataKuliahPraktikum = MataKuliahPraktikum::orderBy('kelas')
-        ->orderBy('kode_mata_kuliah')
-        ->get();
+        // Mengambil semua data Mata Kuliah Praktikum aktif
+        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)->get();
 
-    $selectedMataKuliah = $asisten->mataKuliahPraktikum->pluck('id')->toArray();
+        // Mengambil ID Mata Kuliah Praktikum yang sudah dipilih oleh Asisten Praktikum
+        $selectedMataKuliah = $asisten->mataKuliahPraktikum->pluck('id')->toArray();
 
-    return view('asisten_praktikum.edit', compact('asisten', 'mataKuliahPraktikum', 'selectedMataKuliah'));
-}
-
+        return view('asisten_praktikum.edit', compact('asisten', 'mataKuliahPraktikum', 'selectedMataKuliah'));
+    }
 
     public function update(Request $request, $id)
     {
-        // Validate input
+        // Validasi input
         $request->validate([
             'npm' => 'required|unique:asisten_praktikums,npm,' . $id,
             'nama_praktikan' => 'required',
             'username' => 'required|unique:asisten_praktikums,username,' . $id,
             'mata_kuliah_praktikum_id' => 'required|array',
-            'mata_kuliah_praktikum_id.*' => 'exists:mata_kuliah_praktikums,id', // Ensure valid mata kuliah IDs
+            'mata_kuliah_praktikum_id.*' => 'exists:mata_kuliah_praktikums,id', // Validasi ID mata kuliah
         ]);
 
-        // Retrieve Asisten Praktikum by ID
+        // Mengambil data Asisten Praktikum berdasarkan ID
         $asisten = AsistenPraktikum::findOrFail($id);
 
-        // Update Asisten Praktikum data
+        // Update data Asisten Praktikum
         $asisten->update([
             'npm' => $request->npm,
             'nama_praktikan' => $request->nama_praktikan,
             'username' => $request->username,
         ]);
 
-        // Update the associated User data
+        // Update data User yang terkait
         $user = $asisten->user;
-        $user->email = $request->email;
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password); // Update password only if provided
-        }
-        $user->save(); // Save the User model
+        $user->name = $request->nama_praktikan;
+        $user->email = "{$request->username}@gmail.com";
 
-        // Sync selected Mata Kuliah Praktikum
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password); // Update password jika diisi
+        }
+        $user->save(); // Simpan perubahan data User
+
+        // Sinkronisasi Mata Kuliah Praktikum yang dipilih
         $asisten->mataKuliahPraktikum()->sync($request->mata_kuliah_praktikum_id);
 
         return redirect()->route('asisten_praktikum.index')->with('success', 'Asisten Praktikum berhasil diperbarui.');

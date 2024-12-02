@@ -13,8 +13,6 @@ class Laboran extends Model
     protected $fillable = [
         'nama',
         'username',
-        'email',
-        'password',
         'user_id',
     ];
 

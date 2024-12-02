@@ -17,8 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('username')->unique();
-            $table->string('email')->unique();
-            $table->string('password');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
 

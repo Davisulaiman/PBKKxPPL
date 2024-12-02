@@ -38,7 +38,7 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $laboran->nama }}</td>
                 <td>{{ $laboran->username }}</td>
-                <td>{{ $laboran->email }}</td>
+                <td>{{ $laboran->user->email }}</td>
                 <td>
                     <!-- Tombol Edit dengan Icon dan Teks -->
                     <a href="{{ route('laboran.edit', $laboran->id) }}" class="btn btn-warning" title="Edit">

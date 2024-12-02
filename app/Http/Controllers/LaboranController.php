@@ -14,99 +14,120 @@ class LaboranController extends Controller
         $this->middleware('role:kepala_lab'); // Middleware for access control
     }
 
-
+    /**
+     * Display a listing of the Laboran.
+     */
     public function index()
     {
-        $laborans = Laboran::all();
+        // Retrieve all Laboran data ordered by name
+        $laborans = Laboran::orderBy('nama')->get();
         return view('laboran.index', compact('laborans'));
     }
 
+    /**
+     * Show the form for creating a new Laboran.
+     */
     public function create()
     {
         return view('laboran.create');
     }
 
+    /**
+     * Store a newly created Laboran in storage.
+     */
     public function store(Request $request)
     {
-        // Validation for Laboran data
+        // Validate input
         $request->validate([
             'nama' => 'required',
-            'username' => 'required|unique:users,name',
-            'email' => 'required|unique:users,email',
+            'username' => 'required|unique:laborans,username',
         ]);
-        $password = explode('@', $request->email)[0];
+
+        // Generate a default password based on username
+        $password = explode('@', $request->username)[0];
 
         // Create a new User with the 'laboran' role
         $user = User::create([
             'name' => $request->nama,
-            'username' => $request->username,
-            'email' => $request->email,
+            'email' => "{$request->username}@gmail.com",
             'password' => Hash::make($password),
             'role' => 'laboran',
         ]);
 
-        // Create the Laboran record
+        // Create the Laboran and associate it with the created User
         Laboran::create([
-            'user_id' => $user->id,
-            'email' => $request->email,
             'nama' => $request->nama,
             'username' => $request->username,
-            'password' => Hash::make($password)
+            'user_id' => $user->id,
         ]);
 
         return redirect()->route('laboran.index')->with('success', 'Laboran berhasil ditambahkan.');
     }
 
+    /**
+     * Show the form for editing the specified Laboran.
+     */
     public function edit($id)
     {
+        // Mengambil data Laboran berdasarkan ID
         $laboran = Laboran::findOrFail($id);
-        return view('laboran.edit', compact('laboran'));
-    }
 
-    public function update(Request $request, $id)
-    {
-        // Validasi input data untuk update
-        $request->validate([
-            'nama' => 'required',
-            'username' => 'required|unique:users,name',
-            'email' => 'required|unique:users,email',
-        ]);
-
-        // Temukan Laboran berdasarkan ID
-        $laboran = Laboran::findOrFail($id);
+        // Mengambil data User yang terkait dengan Laboran
         $user = $laboran->user;
 
-        // Update data pengguna
-        $user->update([
-            'name' => $request->nama,
-            'username' => $request->username,
-            'email' => $request->email,
+        return view('laboran.edit', compact('laboran', 'user'));
+    }
+
+    /**
+     * Update the specified Laboran in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'nama' => 'required',
+            'username' => 'required|unique:laborans,username,' . $id, // Mengizinkan username yang sama jika hanya untuk ID yang sama
         ]);
 
-        // Jika password diisi (opsional), ubah password user dan laboran
-        if ($request->filled('password')) {
-            $user->update([
-                'password' => Hash::make($request->password),
-            ]);
-            $laboran->update([
-                'password' => Hash::make($request->password),
-            ]);
-        }
+        // Mengambil data Laboran berdasarkan ID
+        $laboran = Laboran::findOrFail($id);
 
         // Update data Laboran
         $laboran->update([
             'nama' => $request->nama,
             'username' => $request->username,
-            'email' => $request->email,
         ]);
+
+        // Update data User yang terkait dengan Laboran
+        $user = $laboran->user;
+        $user->name = $request->nama;
+        $user->email = "{$request->username}@gmail.com";
+
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save(); // Simpan perubahan data User
 
         return redirect()->route('laboran.index')->with('success', 'Laboran berhasil diperbarui.');
     }
 
+
+    /**
+     * Remove the specified Laboran from storage.
+     */
     public function destroy($id)
     {
+        // Retrieve Laboran by ID
         $laboran = Laboran::findOrFail($id);
-        $laboran->user->delete();
+
+        // Delete associated User if exists
+        if ($laboran->user) {
+            $laboran->user->delete();
+        }
+
+        // Delete Laboran
         $laboran->delete();
 
         return redirect()->route('laboran.index')->with('success', 'Laboran berhasil dihapus.');

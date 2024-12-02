@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid mt-4">
-    <h2 class="mb-4">Manajemen Template Penilaian Praktikum</h2>
+    <h2 class="mb-4">Template Penilaian Praktikum</h2>
 
     <a href="{{ route('praktikum_template.create') }}" class="btn btn-success mb-3">
         <i class="fas fa-plus"></i> Tambah Template Baru
@@ -35,17 +35,40 @@
                            class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <form action="{{ route('praktikum_template.destroy', $template->id) }}"
-                              method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Anda yakin ingin menghapus template ini?')">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </form>
+
+                        <!-- Tombol untuk membuka modal hapus -->
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal{{ $template->id }}">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
                     </td>
                 </tr>
+
+                <!-- Modal Konfirmasi Hapus -->
+                <div class="modal fade" id="deleteModal{{ $template->id }}" tabindex="-1"
+                     aria-labelledby="deleteModalLabel{{ $template->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel{{ $template->id }}">
+                                    Konfirmasi Hapus
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Apakah Anda yakin ingin menghapus template ini?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <form action="{{ route('praktikum_template.destroy', $template->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Hapus</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @empty
                 <tr>
                     <td colspan="3" class="text-center">Tidak ada template tersedia</td>

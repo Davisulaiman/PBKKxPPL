@@ -26,7 +26,11 @@ class PraktikumTemplateController extends Controller
         $this->authorizeRole(['laboran', 'kepala_lab']);
 
         $validatedData = $request->validate([
-            'google_drive_link' => 'required|url|regex:/^(https:\/\/drive\.google\.com\/.*)$/',
+            'google_drive_link' => [
+                'required',
+                'url',
+                'regex:/^(https:\/\/(drive\.google\.com|bit\.ly|docs\.google\.com)\/.+)$/',
+            ],
         ]);
 
         PraktikumTemplate::create($validatedData);
@@ -50,7 +54,11 @@ class PraktikumTemplateController extends Controller
         $template = PraktikumTemplate::findOrFail($id);
 
         $validatedData = $request->validate([
-            'google_drive_link' => 'required|url|regex:/^(https:\/\/drive\.google\.com\/.*)$/',
+            'google_drive_link' => [
+                'required',
+                'url',
+                'regex:/^(https:\/\/(drive\.google\.com|bit\.ly|docs\.google\.com)\/.+)$/',
+            ],
         ]);
 
         $template->update($validatedData);

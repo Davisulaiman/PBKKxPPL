@@ -126,35 +126,24 @@ class PenilaianPraktikumController extends Controller
     }
 
     public function template()
-{
-    $user = auth()->user();
-
-    // Cek jika user adalah asisten_dosen
-    if ($user->role === 'asisten_dosen') {
-        return redirect('https://docs.google.com/spreadsheets/d/1ilQcxefKpGpRBcV0N40OuEgJqVUm45gE/edit?usp=drive_link&ouid=101105418489584668609&rtpof=true&sd=true');
-    }
-
-    return abort(403, 'Anda tidak memiliki akses ke template ini.');
-}
-
-public function editTemplate()
-{
-    $user = auth()->user();
-
-    // Cek akses hanya untuk laboran dan kepala_lab
-    if (in_array($user->role, ['laboran', 'kepala_lab'])) {
-        return redirect('https://docs.google.com/spreadsheets/d/1ilQcxefKpGpRBcV0N40OuEgJqVUm45gE/edit?usp=drive_link&ouid=101105418489584668609&rtpof=true&sd=true');
-    }
-
-    return abort(403, 'Anda tidak memiliki akses untuk mengedit template ini.');
-}
-
-
-    public function downloadTemplate()
     {
-        $filePath = public_path('template_file/TEMPLATE PENILAIAN PRAKTIKUM.xlsx');
-        return response()->download($filePath);
+        $user = auth()->user();
+
+        // Cek jika user adalah asisten_dosen
+        if ($user->role === 'asisten_dosen') {
+            return redirect()->route('penilaian_praktikum.template');
+        }
+
+        // Jika bukan asisten_dosen, tampilkan pesan error 403
+        abort(403, 'Anda tidak memiliki akses ke template ini.');
     }
+
+
+    // public function downloadTemplate()
+    // {
+    //     $filePath = public_path('template_file/TEMPLATE PENILAIAN PRAKTIKUM.xlsx');
+    //     return response()->download($filePath);
+    // }
 
     public function exportPdf()
     {

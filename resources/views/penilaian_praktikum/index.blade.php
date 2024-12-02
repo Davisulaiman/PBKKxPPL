@@ -12,24 +12,38 @@
                         <i class="fas fa-plus"></i> Tambah Penilaian Praktikum
                     </a>
 
-                    <!-- Section for Downloading Template with Styling -->
                     <div class="mb-3 p-3 bg-light border rounded shadow-sm">
+                        <p class="mb-2"><strong>Unduh Template:</strong> Untuk kemudahan penginputan, Anda dapat mengunduh
+                            template penilaian praktikum dengan mengklik tombol di bawah:</p>
+                        <a href="{{ route('penilaian_praktikum.template') }}" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Unduh Template Penilaian Praktikum
+                        </a>
+                    </div>
+
+                    <!-- Section for Downloading Template with Styling -->
+                    {{-- <div class="mb-3 p-3 bg-light border rounded shadow-sm">
                         <p class="mb-2"><strong>Unduh Template:</strong> Untuk kemudahan penginputan, Anda dapat mengunduh
                             template penilaian praktikum dengan mengklik tombol di bawah:</p>
                         <a href="{{ route('penilaian_praktikum.download_template') }}" class="btn btn-primary">
                             <i class="fas fa-download"></i> Unduh Template Penilaian Praktikum
                         </a>
-                    </div>
+                    </div> --}}
                 @endif
 
-                @if(auth()->user()->role === 'asisten_dosen')
-    <a href="{{ route('penilaian_praktikum.template') }}" class="btn btn-primary">Download Template Penilaian Praktikum</a>
-@endif
 
-@if(in_array(auth()->user()->role, ['laboran', 'kepala_lab']))
-    <a href="{{ route('penilaian_praktikum.editTemplate') }}" class="btn btn-success">Kelola Template Penilaian</a>
-@endif
+                @if (in_array(auth()->user()->role, ['laboran', 'kepala_lab']))
+                <div class="mb-3 p-3 bg-light border rounded shadow-sm">
+                    <p class="mb-2"><strong>Kelola Template:</strong> Untuk mengelola template penilaian praktikum, Anda dapat mengklik tombol di bawah:</p>
+                        <a href="{{ route('praktikum_template.index') }}" class="btn btn-success">
+                            <i class="fas fa-cog"></i> Kelola Template Penilaian
+                        </a>
+                </div>
+                @endif
 
+                {{-- @if (auth()->user()->role === 'asisten_dosen')
+                    <a href="{{ route('penilaian_praktikum.template') }}" class="btn btn-primary">Download Template
+                        Penilaian Praktikum</a>
+                @endif --}}
 
                 <!-- Tombol Export PDF (Hanya untuk Laboran dan Kepala Lab) -->
                 @if (in_array(Auth::user()->role, ['laboran', 'kepala_lab']))

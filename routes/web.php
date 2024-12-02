@@ -6,11 +6,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AsistenPraktikumController;
 use App\Http\Controllers\LaporanPraktikumController;
+use App\Http\Controllers\PraktikumTemplateController;
 use App\Http\Controllers\MahasiswaPraktikumController;
+use App\Http\Controllers\PenilaianPraktikumController;
 use App\Http\Controllers\MataKuliahPraktikumController;
 use App\Http\Controllers\AsistenPraktikumPraktikumController;
 use App\Http\Controllers\AbsensiMahasiswaMataKuliahPraktikumController;
-use App\Http\Controllers\PenilaianPraktikumController;
 
 
 // Default landing pages
@@ -107,8 +108,19 @@ Route::middleware(['role:kepala_lab,laboran,asisten_dosen'])->group(function () 
         Route::delete('penilaian_praktikum/{id}', [PenilaianPraktikumController::class, 'destroy'])->name('penilaian_praktikum.destroy');
         Route::get('/penilaian_praktikum/export-pdf', [PenilaianPraktikumController::class, 'exportPdf'])->name('penilaian_praktikum.export_pdf');
         Route::get('/penilaian_praktikum/template', [PenilaianPraktikumController::class, 'template'])->name('penilaian_praktikum.template');
-        Route::get('/penilaian_praktikum/template/edit', [PenilaianPraktikumController::class, 'editTemplate'])->name('penilaian_praktikum.editTemplate');
+        Route::get('/penilaian_praktikum/{id}/edit', [PenilaianPraktikumController::class, 'edit'])->name('penilaian_praktikum.edit');
+        // Route::get('/penilaian_praktikum/template/edit', [PenilaianPraktikumController::class, 'editTemplate'])->name('penilaian_praktikum.editTemplate');
+    });
 
+    Route::middleware(['auth'])->group(function () {
+        // Rute untuk asisten dosen
+        Route::get('/praktikum-template', [PraktikumTemplateController::class, 'templateForAssistant'])
+             ->name('penilaian_praktikum.template');
+
+        // Rute untuk laboran dan kepala lab
+        Route::resource('praktikum_template', PraktikumTemplateController::class)
+             ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
+             ->middleware('role:laboran,kepala_lab');
     });
 
     Route::middleware(['auth', 'role:laboran,kepala_lab,asisten_dosen'])->group(function () {

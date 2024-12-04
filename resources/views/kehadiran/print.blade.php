@@ -71,12 +71,12 @@
             <div class="signature-box">
                 <p>Mengetahui,</p>
                 <div class="signature-line"></div>
-                <p>Nama Pemberi Tanda Tangan</p>
+                <p>Asisten Praktikum</p>
             </div>
             <div class="signature-box">
                 <p>Mengetahui,</p>
                 <div class="signature-line"></div>
-                <p>Nama Pemberi Tanda Tangan</p>
+                <p>Asisten Praktikum</p>
             </div>
         </div>
     </div>

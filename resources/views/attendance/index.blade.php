@@ -13,6 +13,7 @@
                         class="btn btn-info btn-sm">
                         <i class="fas fa-paper-plane"></i> Print
                     </a>
+                    
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered">
@@ -28,11 +29,11 @@
                                     <td>Pertemuan {{ $i }}</td>
                                     <td>
                                         <select name="pertemuan_{{ $i }}" id="pertemuan_{{ $i }}" class="form-control">
-                                            <option value="Hadir" {{ $attendance->{'pertemuan_' . $i} == 'Hadir' ? 'selected' : '' }}>Hadir</option>
-                                            <option value="Sakit" {{ $attendance->{'pertemuan_' . $i} == 'Sakit' ? 'selected' : '' }}>Sakit</option>
-                                            <option value="Izin" {{ $attendance->{'pertemuan_' . $i} == 'Izin' ? 'selected' : '' }}>Izin</option>
-                                            <option value="Alpa" {{ $attendance->{'pertemuan_' . $i} == 'Alpa' ? 'selected' : '' }}>Alpa</option>
-                                            <option value="Tidak Ada Keterangan" {{ $attendance->{'pertemuan_' . $i} == 'Tidak Ada Keterangan' ? 'selected' : '' }}>Tidak Ada Keterangan</option>
+                                            <option value="Hadir" {{ ($attendance->{'pertemuan_' . $i} ?? 'Tidak Ada Keterangan') == 'Hadir' ? 'selected' : '' }}>Hadir</option>
+                                            <option value="Sakit" {{ ($attendance->{'pertemuan_' . $i} ?? 'Tidak Ada Keterangan') == 'Sakit' ? 'selected' : '' }}>Sakit</option>
+                                            <option value="Izin" {{ ($attendance->{'pertemuan_' . $i} ?? 'Tidak Ada Keterangan') == 'Izin' ? 'selected' : '' }}>Izin</option>
+                                            <option value="Alpa" {{ ($attendance->{'pertemuan_' . $i} ?? 'Tidak Ada Keterangan') == 'Alpa' ? 'selected' : '' }}>Alpa</option>
+                                            <option value="Tidak Ada Keterangan" {{ ($attendance->{'pertemuan_' . $i} ?? 'Tidak Ada Keterangan') == 'Tidak Ada Keterangan' ? 'selected' : '' }}>Tidak Ada Keterangan</option>
                                         </select>
                                     </td>
                                 </tr>

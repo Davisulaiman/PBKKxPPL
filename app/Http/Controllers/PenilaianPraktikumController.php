@@ -56,13 +56,12 @@ class PenilaianPraktikumController extends Controller
             'google_drive_link' => [
                 'required',
                 'url',
-                'regex:/^(https:\/\/drive\.google\.com\/.*)$/'
+                'regex:/^(https:\/\/(drive\.google\.com|bit\.ly|docs\.google\.com)\/.*)$/'
             ],
         ]);
 
         $user = auth()->user();
 
-        // Validasi tambahan untuk memastikan asisten dosen hanya mengakses mata kuliah yang terkait
         if ($user->role === 'asisten_dosen' && !$user->asistenPraktikum->mataKuliahPraktikum->pluck('id')->contains($request->mata_kuliah_praktikum_id)) {
             abort(403, 'Anda tidak memiliki akses untuk mata kuliah ini.');
         }
@@ -93,7 +92,6 @@ class PenilaianPraktikumController extends Controller
         $penilaianPraktikum = PenilaianPraktikum::findOrFail($id);
         $user = auth()->user();
 
-        // Cek akses untuk asisten dosen
         if ($user->role === 'asisten_dosen' && !$user->asistenPraktikum->mataKuliahPraktikum->pluck('id')->contains($penilaianPraktikum->mata_kuliah_praktikum_id)) {
             abort(403, 'Anda tidak memiliki akses untuk mengupdate penilaian ini.');
         }
@@ -103,7 +101,7 @@ class PenilaianPraktikumController extends Controller
             'google_drive_link' => [
                 'required',
                 'url',
-                'regex:/^(https:\/\/drive\.google\.com\/.*)$/'
+                'regex:/^(https:\/\/(drive\.google\.com|bit\.ly|docs\.google\.com)\/.*)$/'
             ],
         ]);
 

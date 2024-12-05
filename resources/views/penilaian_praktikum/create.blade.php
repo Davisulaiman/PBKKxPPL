@@ -40,12 +40,13 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="google_drive_link" class="form-label">Google Drive Link</label>
-                                <input type="url" name="google_drive_link" id="google_drive_link" class="form-control @error('google_drive_link') is-invalid @enderror" required value="{{ old('google_drive_link') }}">
+                                <label for="google_drive_link" class="form-label">Google Drive / Bit.ly / Docs Link</label>
+                                <input type="url" name="google_drive_link" id="google_drive_link" class="form-control @error('google_drive_link') is-invalid @enderror" required value="{{ old('google_drive_link', $penilaianPraktikum->google_drive_link ?? '') }}">
                                 @error('google_drive_link')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
 
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">

@@ -13,9 +13,18 @@ class AsistenPraktikumController extends Controller
     public function index()
     {
         // Retrieve all Asisten Praktikum data with Mata Kuliah Praktikum relationships
-        $asistenPraktikum = AsistenPraktikum::with('mataKuliahPraktikum')->get();
+        $asistenPraktikum = AsistenPraktikum::with(['mataKuliahPraktikum' => function($query) {
+            $query->orderBy('kode_mata_kuliah')->orderBy('kelas');
+        }])->get();
+
+        // Sorting the list by kode_mata_kuliah and kelas in a flattened structure for display purposes
+        $asistenPraktikum = $asistenPraktikum->sortBy(function ($asisten) {
+            return $asisten->mataKuliahPraktikum->sortBy('kode_mata_kuliah')->pluck('kode_mata_kuliah')->implode(' ') . $asisten->mataKuliahPraktikum->pluck('kelas')->implode(' ');
+        });
+
         return view('asisten_praktikum.index', compact('asistenPraktikum'));
     }
+
 
     public function create()
     {

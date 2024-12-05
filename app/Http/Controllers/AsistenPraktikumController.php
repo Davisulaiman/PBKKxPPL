@@ -19,10 +19,15 @@ class AsistenPraktikumController extends Controller
 
     public function create()
     {
-        // Retrieve active Mata Kuliah Praktikum data
-        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)->get();
+        // Retrieve active Mata Kuliah Praktikum data ordered by kode_mata_kuliah and kelas
+        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)
+            ->orderBy('kode_mata_kuliah')
+            ->orderBy('kelas')
+            ->get();
+
         return view('asisten_praktikum.create', compact('mataKuliahPraktikum'));
     }
+
 
     public function store(Request $request)
     {
@@ -62,8 +67,11 @@ class AsistenPraktikumController extends Controller
         // Mengambil data Asisten Praktikum berdasarkan ID
         $asisten = AsistenPraktikum::with('user')->findOrFail($id);
 
-        // Mengambil semua data Mata Kuliah Praktikum aktif
-        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)->get();
+        // Mengambil semua data Mata Kuliah Praktikum aktif terurut berdasarkan kode_mata_kuliah dan kelas
+        $mataKuliahPraktikum = MataKuliahPraktikum::where('status_aktif', true)
+            ->orderBy('kode_mata_kuliah')
+            ->orderBy('kelas')
+            ->get();
 
         // Mengambil ID Mata Kuliah Praktikum yang sudah dipilih oleh Asisten Praktikum
         $selectedMataKuliah = $asisten->mataKuliahPraktikum->pluck('id')->toArray();

@@ -3,6 +3,7 @@
 @section('content')
     <div class="container-fluid px-4">
         <h1 class="mt-4">Mata Kuliah Praktikum</h1>
+
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Daftar Mata Kuliah Praktikum</li>
         </ol>

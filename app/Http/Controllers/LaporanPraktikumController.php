@@ -96,33 +96,50 @@ class LaporanPraktikumController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $mata_kuliah_id, int $pertemuan)
     {
-        // Tampilkan form edit laporan praktikum
-        $laporanPraktikum = LaporanPraktikum::findOrFail($id);
+        $laporanPraktikum = LaporanPraktikum::where('mata_kuliah_praktikum_id', $mata_kuliah_id)
+            ->where('pertemuan', $pertemuan)
+            ->first();
+
+        if (!$laporanPraktikum) {
+            return redirect()->route('laporan_praktikum.index')
+            ->with('error', 'Maaf, data laporan praktikum tidak ditemukan. Silakan tambahkan data terlebih dahulu.');
+        }
+
         return view('laporan_praktikum.edit', compact('laporanPraktikum'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        // Update laporan praktikum
-        $laporanPraktikum = LaporanPraktikum::findOrFail($id);
+        // Cari laporan praktikum berdasarkan ID
+        $laporanPraktikum = LaporanPraktikum::find($id);
 
-        $request->validate([
+        // Jika data tidak ditemukan, redirect dengan alert
+        if (!$laporanPraktikum) {
+            return redirect()->route('laporan_praktikum.index')
+                ->with('error', 'Maaf, data laporan praktikum tersebut tidak ditemukan. Silakan tambahkan data terlebih dahulu.');
+        }
+
+        // Validasi data input
+        $validatedData = $request->validate([
             'pertemuan' => 'required|integer|min:1|max:16',
-            'materi' => 'required|string',
-            'bukti_praktikum' => 'nullable|url'
+            'materi' => 'required|string|max:255',
+            'bukti_praktikum' => [
+                'nullable',
+                'url',
+                'regex:/^(https:\/\/drive\.google\.com\/.*)$/'
+            ]
         ]);
 
-        $laporanPraktikum->update([
-            'pertemuan' => $request->pertemuan,
-            'materi' => $request->materi,
-            'bukti_praktikum' => $request->bukti_praktikum,
-        ]);
+        // Perbarui data laporan praktikum
+        $laporanPraktikum->update($validatedData);
 
+        // Redirect ke halaman utama dengan pesan sukses
         return redirect()->route('laporan_praktikum.index')->with('success', 'Laporan praktikum berhasil diperbarui.');
     }
 

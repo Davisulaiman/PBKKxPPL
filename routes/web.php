@@ -135,17 +135,19 @@ Route::middleware(['auth', 'role:asisten_dosen,laboran,kepala_lab'])->group(func
         // Menambahkan route untuk store laporan praktikum
         Route::resource('laporan_praktikum', LaporanPraktikumController::class)->only(['store']);
 
+
         // Menambahkan route untuk create laporan praktikum
         Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}/create', [LaporanPraktikumController::class, 'create'])
             ->name('laporan_praktikum.create');
 
         // Menambahkan route untuk edit laporan praktikum
         Route::get('/laporan_praktikum/{mata_kuliah_id}/{pertemuan}/edit', [LaporanPraktikumController::class, 'edit'])
-            ->name('laporan_praktikum.edit');
+        ->name('laporan_praktikum.edit');
+
 
         // Menambahkan route untuk update laporan praktikum
         Route::put('/laporan_praktikum/{id}', [LaporanPraktikumController::class, 'update'])
-            ->name('laporan_praktikum.update');
+        ->name('laporan_praktikum.update');
     });
 });
 

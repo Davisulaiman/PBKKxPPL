@@ -25,7 +25,6 @@
                     Rekap Laporan Praktikum
                 </a>
 
-
                 <div class="table-responsive">
                     <table id="laporanTable" class="table table-striped table-bordered table-hover">
                         <thead class="table-dark">
